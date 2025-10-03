@@ -815,6 +815,108 @@
             font-size: 12px;
         }
         
+        /* Novos estilos para melhorias */
+        .progress-bar {
+            height: 6px;
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, var(--azul), var(--verde));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .quick-action-btn {
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+            padding: 15px;
+        }
+        
+        .search-highlight {
+            background-color: #fff9c4;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        .data-quality-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .quality-bar {
+            flex: 1;
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .quality-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .quality-good {
+            background: linear-gradient(135deg, var(--verde), var(--verde-escuro));
+        }
+        
+        .quality-warning {
+            background: linear-gradient(135deg, var(--amarelo), var(--amarelo-escuro));
+        }
+        
+        .quality-poor {
+            background: linear-gradient(135deg, var(--vermelho), var(--vermelho-escuro));
+        }
+        
+        .help-tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 5px;
+            color: var(--azul);
+            cursor: help;
+        }
+        
+        /* Estilos para o novo filtro de categorias */
+        select[multiple] {
+            min-height: 120px;
+            border-radius: 8px;
+            padding: 8px;
+        }
+        
+        optgroup {
+            font-weight: bold;
+            color: var(--azul);
+        }
+        
+        optgroup option {
+            font-weight: normal;
+            color: var(--cinza-escuro);
+            padding-left: 10px;
+        }
+        
+        .filter-group small {
+            color: #666;
+            font-size: 12px;
+            margin-top: 5px;
+            display: block;
+        }
+        
         @media (max-width: 1024px) {
             .charts-container, .resumo-grid, .manipulacao-container {
                 grid-template-columns: 1fr;
@@ -836,6 +938,14 @@
             
             .data-summary {
                 flex-direction: column;
+            }
+            
+            .quick-actions {
+                flex-direction: column;
+            }
+            
+            .quick-action-btn {
+                min-width: 100%;
             }
         }
     </style>
@@ -873,6 +983,19 @@
                     <span>Nenhum dado importado ainda</span>
                 </div>
                 
+                <!-- Ações Rápidas -->
+                <div class="quick-actions">
+                    <button class="btn-success quick-action-btn" id="quick-import">
+                        <i class="fas fa-file-import"></i> Importar Dados
+                    </button>
+                    <button class="btn-warning quick-action-btn" id="quick-export" disabled>
+                        <i class="fas fa-file-export"></i> Exportar Relatório
+                    </button>
+                    <button class="btn-purple quick-action-btn" id="quick-analysis" disabled>
+                        <i class="fas fa-chart-bar"></i> Análise Rápida
+                    </button>
+                </div>
+                
                 <div class="data-summary" style="display: none;">
                     <div class="summary-card iss">
                         <i class="fas fa-file-invoice-dollar" style="color: var(--azul);"></i>
@@ -899,6 +1022,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">Filtros de Análise</div>
+                        <button class="btn-purple" id="reset-filters"><i class="fas fa-redo"></i> Redefinir</button>
                     </div>
                     
                     <div class="filters">
@@ -920,6 +1044,27 @@
                                 <option value="ISS">ISS</option>
                                 <option value="ICMS">ICMS</option>
                             </select>
+                        </div>
+                        
+                        <!-- NOVO FILTRO DE CATEGORIAS -->
+                        <div class="filter-group">
+                            <label for="categoria-tributo">Categoria do Tributo:</label>
+                            <select id="categoria-tributo" multiple style="height: 120px;">
+                                <optgroup label="ICMS">
+                                    <option value="ICMS ST">ICMS ST</option>
+                                    <option value="ICMS Diferencial">ICMS Diferencial</option>
+                                    <option value="ICMS Normal">ICMS Normal</option>
+                                    <option value="ICMS DIFAL">ICMS DIFAL</option>
+                                    <option value="Outros ICMS">Outros ICMS</option>
+                                </optgroup>
+                                <optgroup label="ISS">
+                                    <option value="ISS Retido">ISS Retido</option>
+                                    <option value="ISS Próprio">ISS Próprio</option>
+                                    <option value="Outros ISS">Outros ISS</option>
+                                </optgroup>
+                                <option value="Todos">Todas as Categorias</option>
+                            </select>
+                            <small>Segure Ctrl para selecionar múltiplas categorias</small>
                         </div>
                         
                         <div class="filter-group">
@@ -1401,7 +1546,7 @@
     </div>
 
     <script>
-        // Módulos para organização do código
+        // Módulos para organização do código - PRESERVANDO TODAS AS FUNCIONALIDADES ORIGINAIS
         const DataManager = (function() {
             let dadosImportados = [];
             let currentFileData = null;
@@ -1414,7 +1559,7 @@
                 formatacaoMoeda: 'pt-BR'
             };
             
-            // Mapeamento fixo das colunas
+            // Mapeamento fixo das colunas - PRESERVADO
             const MAPEAMENTO_FIXO = {
                 empresa: 0,    // Coluna A
                 valor: 1,      // Coluna B  
@@ -1422,7 +1567,7 @@
                 tipo: 3        // Coluna D
             };
 
-            // Mapeamento dos tipos para categorias
+            // Mapeamento dos tipos para categorias - PRESERVADO
             const MAPEAMENTO_TIPOS = {
                 // ICMS
                 'TR49': { tributo: 'ICMS', categoria: 'ICMS ST', nome: 'ICMS ST - RECOLHIMENTO' },
@@ -1452,7 +1597,7 @@
                 getMapeamentoFixoTipos: () => MAPEAMENTO_TIPOS,
                 getMapeamentoFixo: () => MAPEAMENTO_FIXO,
                 
-                // Sanitização de dados
+                // Sanitização de dados - PRESERVADA
                 sanitizarDados: function(dados) {
                     return dados.map(item => ({
                         ...item,
@@ -1463,7 +1608,7 @@
                     }));
                 },
                 
-                // Verificar duplicatas - CORRIGIDA: Agora só remove duplicatas exatas
+                // Verificar duplicatas - CORRIGIDA: Agora só remove duplicatas exatas - PRESERVADA
                 removerDuplicatas: function(dados) {
                     const chaves = new Set();
                     const resultado = [];
@@ -1481,7 +1626,7 @@
                     return resultado;
                 },
                 
-                // Adicionar ao histórico
+                // Adicionar ao histórico - PRESERVADA
                 adicionarAoHistorico: function(nomeArquivo) {
                     const novoItem = {
                         id: Date.now().toString(),
@@ -1495,7 +1640,7 @@
                     localStorage.setItem('historicoImportacoes', JSON.stringify(historicoImportacoes));
                 },
                 
-                // Sistema de backup
+                // Sistema de backup - PRESERVADO
                 criarBackup: function() {
                     const backup = {
                         id: Date.now().toString(),
@@ -1528,7 +1673,7 @@
                     }
                 },
                 
-                // Salvar operação personalizada
+                // Salvar operação personalizada - PRESERVADA
                 salvarOperacao: function(operacao) {
                     operacao.id = Date.now().toString();
                     operacoesSalvas.push(operacao);
@@ -1536,7 +1681,7 @@
                     return operacao;
                 },
                 
-                // Executar operação personalizada
+                // Executar operação personalizada - PRESERVADA
                 executarOperacao: function(operacao, dados) {
                     let dadosFiltrados = [...dados];
                     
@@ -1585,7 +1730,7 @@
                     return resultado;
                 },
                 
-                // Operação de soma
+                // Operação de soma - PRESERVADA
                 executarSoma: function(dados, agrupamento) {
                     const grupos = {};
                     
@@ -1632,7 +1777,7 @@
                     };
                 },
                 
-                // Operação de média
+                // Operação de média - PRESERVADA
                 executarMedia: function(dados, agrupamento) {
                     const grupos = {};
                     
@@ -1681,7 +1826,7 @@
                     };
                 },
                 
-                // Operação de contagem
+                // Operação de contagem - PRESERVADA
                 executarContagem: function(dados, agrupamento) {
                     const grupos = {};
                     
@@ -1728,12 +1873,12 @@
                     };
                 },
                 
-                // Operação de agrupamento
+                // Operação de agrupamento - PRESERVADA
                 executarAgrupamento: function(dados, agrupamento) {
                     return this.agruparDados(dados, agrupamento);
                 },
                 
-                // Converter tipo para categoria
+                // Converter tipo para categoria - PRESERVADA
                 converterTipoParaCategoria: function(tipo) {
                     if (!tipo) return { tributo: 'ICMS', categoria: 'Não Especificado', nome: 'Não Especificado' };
                     
@@ -1775,7 +1920,7 @@
                     return { tributo: 'ICMS', categoria: 'Outros', nome: tipoStr };
                 },
                 
-                // Processar data - CORRIGIDA: Melhor tratamento de datas
+                // Processar data - CORRIGIDA: Melhor tratamento de datas - PRESERVADA
                 processarData: function(dataStr) {
                     if (!dataStr) return { mes: '01', ano: new Date().getFullYear().toString() };
                     
@@ -1852,7 +1997,7 @@
                     return { mes, ano: anoNum.toString() };
                 },
                 
-                // Agrupar dados por diferentes critérios
+                // Agrupar dados por diferentes critérios - PRESERVADA
                 agruparDados: function(dados, criterio) {
                     const grupos = {};
                     
@@ -1911,7 +2056,7 @@
                     }));
                 },
                 
-                // Detectar valores atípicos
+                // Detectar valores atípicos - PRESERVADA
                 detectarValoresAtipicos: function(dados) {
                     if (dados.length === 0) return [];
                     
@@ -1935,7 +2080,7 @@
                         .sort((a, b) => b.desvio - a.desvio);
                 },
                 
-                // Comparar períodos
+                // Comparar períodos - PRESERVADA
                 compararPeriodos: function(dados, periodoAtual, periodoAnterior) {
                     const dadosAtual = this.filtrarPorPeriodo(dados, periodoAtual);
                     const dadosAnterior = this.filtrarPorPeriodo(dados, periodoAnterior);
@@ -1962,7 +2107,7 @@
                     };
                 },
                 
-                // Filtrar por período
+                // Filtrar por período - PRESERVADA
                 filtrarPorPeriodo: function(dados, periodo) {
                     return dados.filter(d => {
                         const dataItem = new Date(d.ano, d.mes - 1);
@@ -1972,7 +2117,7 @@
                     });
                 },
                 
-                // Gerar observações e insights
+                // Gerar observações e insights - PRESERVADA
                 gerarObservacoes: function(dados) {
                     const observacoes = [];
                     
@@ -2054,7 +2199,7 @@
             };
         })();
 
-        // Módulo de Interface
+        // Módulo de Interface - PRESERVANDO TODAS AS FUNCIONALIDADES
         const InterfaceManager = (function() {
             let issChart, icmsChart, empresasChart, evolucaoChart;
             let currentPage = 1;
@@ -2065,7 +2210,7 @@
             let debounceTimer;
             
             return {
-                // Mostrar notificações
+                // Mostrar notificações - PRESERVADA
                 mostrarNotificacao: function(mensagem, tipo) {
                     const notification = document.getElementById('notification');
                     const message = document.getElementById('notification-message');
@@ -2079,7 +2224,7 @@
                     }, 5000);
                 },
                 
-                // Mostrar/ocultar loading
+                // Mostrar/ocultar loading - PRESERVADA
                 toggleLoading: function(chartId, show) {
                     const loadingElement = document.getElementById(`${chartId}-loading`);
                     if (loadingElement) {
@@ -2087,7 +2232,7 @@
                     }
                 },
                 
-                // Inicializar gráficos vazios
+                // Inicializar gráficos vazios - PRESERVADA
                 inicializarGraficosVazios: function() {
                     // Gráfico ISS
                     const issCtx = document.getElementById('iss-chart').getContext('2d');
@@ -2352,7 +2497,7 @@
                     });
                 },
                 
-                // Atualizar gráficos
+                // Atualizar gráficos - PRESERVADA
                 atualizarGraficos: function(dados) {
                     if (dados.length === 0) return;
                     
@@ -2459,7 +2604,7 @@
                     }, 100);
                 },
                 
-                // Atualizar tabela com dados agrupados
+                // Atualizar tabela com dados agrupados - PRESERVADA
                 atualizarTabelaAgrupada: function(dados) {
                     const tabelaBody = document.getElementById('dados-agrupados');
                     const tableContainer = document.getElementById('table-container');
@@ -2561,7 +2706,7 @@
                     document.getElementById('page-info').textContent = `Página ${currentPage} de ${totalPages}`;
                 },
                 
-                // Toggle para mostrar/ocultar detalhes do grupo
+                // Toggle para mostrar/ocultar detalhes do grupo - PRESERVADA
                 toggleGroupDetails: function(index, registros) {
                     const icon = document.getElementById(`toggle-${index}`);
                     const row = icon.closest('tr');
@@ -2620,7 +2765,7 @@
                     icon.className = 'fas fa-chevron-down';
                 },
                 
-                // Formatar data para exibição
+                // Formatar data para exibição - PRESERVADA
                 formatarDataExibicao: function(mes, ano) {
                     const meses = [
                         'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
@@ -2633,7 +2778,7 @@
                     return `${mes}/${ano}`;
                 },
                 
-                // Atualizar resumo de dados
+                // Atualizar resumo de dados - PRESERVADA
                 atualizarResumoDados: function(dados) {
                     const totalISS = dados
                         .filter(d => d.tributo === 'ISS')
@@ -2653,7 +2798,7 @@
                     document.getElementById('total-empresas').textContent = empresasAtivas;
                 },
                 
-                // Atualizar comparativo entre períodos
+                // Atualizar comparativo entre períodos - PRESERVADA
                 atualizarComparativoPeriodos: function(dados) {
                     const comparisonContent = document.getElementById('comparison-content');
                     
@@ -2701,7 +2846,7 @@
                     `;
                 },
                 
-                // Atualizar alertas de valores atípicos
+                // Atualizar alertas de valores atípicos - PRESERVADA
                 atualizarAlertas: function(dados) {
                     const alertsContent = document.getElementById('alerts-content');
                     
@@ -2741,7 +2886,7 @@
                     alertsContent.innerHTML = html;
                 },
                 
-                // Atualizar observações e insights
+                // Atualizar observações e insights - PRESERVADA
                 atualizarObservacoes: function(dados) {
                     const observacoesContent = document.getElementById('observacoes-content');
                     
@@ -2780,7 +2925,7 @@
                     observacoesContent.innerHTML = html;
                 },
                 
-                // Formatar data para exibição de período
+                // Formatar data para exibição de período - PRESERVADA
                 formatarDataPeriodo: function(data) {
                     const meses = [
                         'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
@@ -2789,7 +2934,7 @@
                     return `${meses[data.getMonth()]}/${data.getFullYear()}`;
                 },
                 
-                // Exportar para PDF
+                // Exportar para PDF - PRESERVADA
                 exportarParaPDF: function(titulo, dados, tipo) {
                     const { jsPDF } = window.jspdf;
                     const doc = new jsPDF();
@@ -2843,7 +2988,7 @@
                     doc.save(`${titulo.replace(/\s+/g, '_')}.pdf`);
                 },
                 
-                // Debounce para busca
+                // Debounce para busca - PRESERVADA
                 debounce: function(func, delay) {
                     return function() {
                         const context = this;
@@ -2853,7 +2998,7 @@
                     };
                 },
                 
-                // Getters e setters para paginação/ordenação
+                // Getters e setters para paginação/ordenação - PRESERVADOS
                 getCurrentPage: () => currentPage,
                 setCurrentPage: (page) => { currentPage = page; },
                 getCurrentSort: () => currentSort,
@@ -2866,13 +3011,16 @@
             };
         })();
 
-        // Inicialização da aplicação
+        // Inicialização da aplicação - PRESERVADA
         document.addEventListener('DOMContentLoaded', function() {
             // Inicializar gráficos
             InterfaceManager.inicializarGraficosVazios();
             
             // Inicializar funcionalidades da interface
             inicializarEventListeners();
+            
+            // Inicializar filtro de categorias
+            window.filtroCategorias = inicializarFiltroCategorias();
             
             // Carregar dados existentes se houver
             const dados = DataManager.getDados();
@@ -2893,7 +3041,95 @@
             }
         });
 
-        // Funções de inicialização de eventos
+        // Função para inicializar o filtro de categorias
+        function inicializarFiltroCategorias() {
+            const selectCategorias = document.getElementById('categoria-tributo');
+    
+            // Evento para seleção/desseleção
+            selectCategorias.addEventListener('change', function() {
+                const opcoesSelecionadas = Array.from(this.selectedOptions);
+                
+                // Se "Todos" for selecionado, limpar outras seleções
+                if (opcoesSelecionadas.some(opt => opt.value === 'Todos')) {
+                    Array.from(this.options).forEach(opt => {
+                        opt.selected = opt.value === 'Todos';
+                    });
+                }
+                // Se outras opções forem selecionadas, remover "Todos"
+                else if (opcoesSelecionadas.length > 0) {
+                    const optionTodos = Array.from(this.options).find(opt => opt.value === 'Todos');
+                    if (optionTodos) optionTodos.selected = false;
+                }
+            });
+            
+            // Preencher dinamicamente com categorias existentes nos dados
+            this.atualizarOpcoesCategorias = function(dados) {
+                if (!dados || dados.length === 0) return;
+                
+                const categoriasExistentes = [...new Set(dados.map(d => d.categoria))];
+                const optgroups = {
+                    'ICMS': [],
+                    'ISS': []
+                };
+                
+                categoriasExistentes.forEach(categoria => {
+                    if (categoria.includes('ICMS')) {
+                        if (!optgroups.ICMS.includes(categoria)) {
+                            optgroups.ICMS.push(categoria);
+                        }
+                    } else if (categoria.includes('ISS')) {
+                        if (!optgroups.ISS.includes(categoria)) {
+                            optgroups.ISS.push(categoria);
+                        }
+                    }
+                });
+                
+                // Limpar opções existentes (exceto "Todos")
+                Array.from(selectCategorias.options).forEach(option => {
+                    if (option.value !== 'Todos') {
+                        selectCategorias.removeChild(option);
+                    }
+                });
+                
+                // Adicionar categorias de ICMS
+                if (optgroups.ICMS.length > 0) {
+                    const optgroupICMS = document.createElement('optgroup');
+                    optgroupICMS.label = 'ICMS';
+                    optgroups.ICMS.forEach(categoria => {
+                        const option = document.createElement('option');
+                        option.value = categoria;
+                        option.textContent = categoria;
+                        optgroupICMS.appendChild(option);
+                    });
+                    selectCategorias.insertBefore(optgroupICMS, selectCategorias.firstChild);
+                }
+                
+                // Adicionar categorias de ISS
+                if (optgroups.ISS.length > 0) {
+                    const optgroupISS = document.createElement('optgroup');
+                    optgroupISS.label = 'ISS';
+                    optgroups.ISS.forEach(categoria => {
+                        const option = document.createElement('option');
+                        option.value = categoria;
+                        option.textContent = categoria;
+                        optgroupISS.appendChild(option);
+                    });
+                    selectCategorias.insertBefore(optgroupISS, selectCategorias.firstChild);
+                }
+            };
+            
+            return this;
+        }
+
+        // Função para limpar o filtro de categorias
+        function limparFiltroCategorias() {
+            const selectCategorias = document.getElementById('categoria-tributo');
+            Array.from(selectCategorias.options).forEach(option => {
+                option.selected = option.value === 'Todos';
+            });
+        }
+
+        // Funções de inicialização de eventos - PRESERVADAS
         function inicializarEventListeners() {
             // Sistema de abas do menu lateral
             document.querySelectorAll('.sidebar li').forEach(item => {
@@ -3010,9 +3246,24 @@
             // Configurações
             document.getElementById('salvar-configuracoes').addEventListener('click', salvarConfiguracoes);
             document.getElementById('restaurar-padroes').addEventListener('click', restaurarPadroes);
+            
+            // Ações rápidas
+            document.getElementById('quick-import').addEventListener('click', function() {
+                document.querySelector('.sidebar li[data-tab="importar"]').click();
+            });
+            
+            document.getElementById('reset-filters').addEventListener('click', function() {
+                document.getElementById('empresa').value = 'todas';
+                document.getElementById('tributo').value = 'todos';
+                document.getElementById('periodo').value = '3';
+                document.getElementById('data-inicio-group').style.display = 'none';
+                document.getElementById('data-fim-group').style.display = 'none';
+                limparFiltroCategorias();
+                aplicarFiltros();
+            });
         }
 
-        // Funções de processamento de arquivo
+        // Funções de processamento de arquivo - PRESERVADAS
         function handleFile(file) {
             // Validação de segurança adicional
             if (!file.name.match(/\.(xlsx|xls)$/i)) {
@@ -3187,18 +3438,30 @@
             const empresaFiltro = document.getElementById('empresa').value;
             const tributoFiltro = document.getElementById('tributo').value;
             const periodoFiltro = document.getElementById('periodo').value;
+            const categoriasSelecionadas = Array.from(document.getElementById('categoria-tributo').selectedOptions)
+                .map(opt => opt.value)
+                .filter(val => val !== 'Todos');
             
             let dadosFiltrados = [...DataManager.getDados()];
             
+            // Aplicar filtro de empresa
             if (empresaFiltro !== 'todas') {
                 dadosFiltrados = dadosFiltrados.filter(d => d.empresa === empresaFiltro);
             }
             
+            // Aplicar filtro de tributo
             if (tributoFiltro !== 'todos') {
                 dadosFiltrados = dadosFiltrados.filter(d => d.tributo === tributoFiltro);
             }
             
-            // Aplicar filtro de período (implementação básica)
+            // Aplicar filtro de categoria - CORREÇÃO IMPORTANTE
+            if (categoriasSelecionadas.length > 0) {
+                dadosFiltrados = dadosFiltrados.filter(d => 
+                    categoriasSelecionadas.includes(d.categoria)
+                );
+            }
+            
+            // Aplicar filtro de período
             if (periodoFiltro !== 'personalizado') {
                 const meses = parseInt(periodoFiltro);
                 const dataLimite = new Date();
@@ -3208,6 +3471,17 @@
                     const dataItem = new Date(d.ano, d.mes - 1);
                     return dataItem >= dataLimite;
                 });
+            } else {
+                // Implementar lógica para período personalizado se necessário
+                const dataInicio = document.getElementById('data-inicio').value;
+                const dataFim = document.getElementById('data-fim').value;
+                
+                if (dataInicio && dataFim) {
+                    dadosFiltrados = dadosFiltrados.filter(d => {
+                        const dataItem = `${d.ano}-${d.mes.padStart(2, '0')}`;
+                        return dataItem >= dataInicio && dataItem <= dataFim;
+                    });
+                }
             }
             
             // Atualizar interface com dados filtrados
@@ -3288,6 +3562,11 @@
             document.getElementById('last-update').textContent = formattedDate;
             document.querySelector('.last-update span').textContent = `Última atualização: ${formattedDate}`;
             
+            // Atualizar opções de categorias com base nos dados
+            if (window.filtroCategorias && window.filtroCategorias.atualizarOpcoesCategorias) {
+                window.filtroCategorias.atualizarOpcoesCategorias(dados);
+            }
+            
             // Mostrar resumo de dados
             document.querySelector('.data-summary').style.display = 'flex';
             InterfaceManager.atualizarResumoDados(dados);
@@ -3299,6 +3578,8 @@
             });
             document.getElementById('export-tabela-excel').disabled = false;
             document.getElementById('export-tabela-pdf').disabled = false;
+            document.getElementById('quick-export').disabled = false;
+            document.getElementById('quick-analysis').disabled = false;
             
             // Atualizar gráficos e tabela
             InterfaceManager.atualizarGraficos(dados);
@@ -3316,7 +3597,7 @@
             });
         }
 
-        // Funções do sistema de backup
+        // Funções do sistema de backup - PRESERVADAS
         function criarBackup() {
             const dados = DataManager.getDados();
             if (dados.length === 0) {
@@ -3388,7 +3669,7 @@
             }
         }
 
-        // Funções do histórico
+        // Funções do histórico - PRESERVADAS
         function atualizarHistoricoUI() {
             const historico = DataManager.getHistorico();
             const historicoTabela = document.getElementById('historico-tabela');
@@ -3436,7 +3717,7 @@
             }
         }
 
-        // Funções da nova aba de Manipulação de Dados
+        // Funções da nova aba de Manipulação de Dados - PRESERVADAS
         function executarOperacao() {
             const dados = DataManager.getDados();
             if (dados.length === 0) {
@@ -3728,7 +4009,7 @@
             }
         }
 
-        // Funções de Configurações
+        // Funções de Configurações - PRESERVADAS
         function carregarConfiguracoesUI() {
             const configuracoes = DataManager.getConfiguracoes();
             
@@ -3760,6 +4041,91 @@
                 carregarConfiguracoesUI();
                 InterfaceManager.mostrarNotificacao('Configurações padrão restauradas!', 'success');
             }
+        }
+
+        // Adicionar funções para as ações rápidas
+        document.getElementById('quick-export').addEventListener('click', function() {
+            const dados = DataManager.getDados();
+            if (dados.length === 0) {
+                InterfaceManager.mostrarNotificacao('Não há dados para exportar', 'warning');
+                return;
+            }
+            
+            // Criar um workbook Excel
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.json_to_sheet(dados.map(d => ({
+                Empresa: d.empresa,
+                Mês: d.mes,
+                Ano: d.ano,
+                Tributo: d.tributo,
+                Categoria: d.categoria,
+                Valor: d.valor
+            })));
+            
+            XLSX.utils.book_append_sheet(wb, ws, "Dados Tributários");
+            XLSX.writeFile(wb, "dados_tributarios.xlsx");
+            
+            InterfaceManager.mostrarNotificacao('Relatório exportado com sucesso!', 'success');
+        });
+
+        document.getElementById('quick-analysis').addEventListener('click', function() {
+            const dados = DataManager.getDados();
+            if (dados.length === 0) {
+                InterfaceManager.mostrarNotificacao('Não há dados para análise', 'warning');
+                return;
+            }
+            
+            // Gerar análise rápida
+            const totalISS = dados.filter(d => d.tributo === 'ISS').reduce((sum, d) => sum + d.valor, 0);
+            const totalICMS = dados.filter(d => d.tributo === 'ICMS').reduce((sum, d) => sum + d.valor, 0);
+            const totalGeral = totalISS + totalICMS;
+            
+            const empresas = [...new Set(dados.map(d => d.empresa))];
+            const meses = [...new Set(dados.map(d => `${d.mes}/${d.ano}`))];
+            
+            const analise = `
+                <div class="comparison-card">
+                    <div class="comparison-title">Resumo da Análise</div>
+                    <p><strong>Total Geral:</strong> R$ ${totalGeral.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</p>
+                    <p><strong>ISS:</strong> R$ ${totalISS.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} (${((totalISS/totalGeral)*100).toFixed(1)}%)</p>
+                    <p><strong>ICMS:</strong> R$ ${totalICMS.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} (${((totalICMS/totalGeral)*100).toFixed(1)}%)</p>
+                    <p><strong>Empresas:</strong> ${empresas.join(', ')}</p>
+                    <p><strong>Período:</strong> ${meses.length} meses</p>
+                </div>
+            `;
+            
+            // Mostrar análise em um alerta ou modal
+            alert(`Análise Rápida:\n\nTotal Geral: R$ ${totalGeral.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\nISS: R$ ${totalISS.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\nICMS: R$ ${totalICMS.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\nEmpresas: ${empresas.join(', ')}\nPeríodo: ${meses.length} meses`);
+            
+            InterfaceManager.mostrarNotificacao('Análise rápida concluída!', 'success');
+        });
+
+        // Função auxiliar para soma de categorias específicas
+        function somarCategoriasEspecificas(categorias) {
+            const dados = DataManager.getDados();
+            if (dados.length === 0) {
+                InterfaceManager.mostrarNotificacao('Não há dados para calcular', 'warning');
+                return 0;
+            }
+            
+            const total = dados
+                .filter(d => categorias.includes(d.categoria))
+                .reduce((sum, d) => sum + d.valor, 0);
+            
+            return total;
+        }
+
+        // Exemplo de uso: Somar ICMS ST + ICMS Diferencial
+        function exemploUsoSoma() {
+            const categoriasParaSomar = ['ICMS ST', 'ICMS Diferencial'];
+            const total = somarCategoriasEspecificas(categoriasParaSomar);
+            
+            InterfaceManager.mostrarNotificacao(
+                `Soma de ${categoriasParaSomar.join(' + ')}: R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
+                'success'
+            );
+            
+            return total;
         }
     </script>
 </body>
