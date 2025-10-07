@@ -934,6 +934,13 @@
             text-align: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             border-left: 4px solid var(--azul);
+            cursor: pointer;
+            transition: var(--transicao);
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
         
         .kpi-value {
@@ -1207,6 +1214,43 @@
                 max-width: none;
             }
         }
+
+        /* Novos estilos para as melhorias dos KPIs */
+        .kpi-explanation {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .kpi-detail-modal {
+            max-width: 700px;
+        }
+
+        .kpi-breakdown {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .breakdown-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px;
+            border-left: 4px solid var(--azul);
+        }
+
+        .breakdown-title {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .breakdown-value {
+            font-size: 16px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -1279,25 +1323,73 @@
                 
                 <!-- KPIs Principais -->
                 <div class="kpi-grid" id="kpi-container" style="display: none;">
-                    <div class="kpi-card">
+                    <div class="kpi-card" id="kpi-crescimento-card">
                         <i class="fas fa-chart-line" style="color: var(--azul);"></i>
                         <div class="kpi-value" id="kpi-crescimento">0%</div>
                         <div class="kpi-label">Crescimento Mensal</div>
+                        <div class="kpi-explanation">Variação do mês atual vs anterior</div>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" id="kpi-distribuicao-card">
                         <i class="fas fa-balance-scale" style="color: var(--verde);"></i>
                         <div class="kpi-value" id="kpi-distribuicao">0%</div>
                         <div class="kpi-label">Distribuição ISS/ICMS</div>
+                        <div class="kpi-explanation">Proporção entre os tributos</div>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" id="kpi-tendencia-card">
                         <i class="fas fa-trending-up" style="color: var(--amarelo);"></i>
                         <div class="kpi-value" id="kpi-tendencia">0%</div>
                         <div class="kpi-label">Tendência Trimestral</div>
+                        <div class="kpi-explanation">Variação do último trimestre</div>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" id="kpi-anomalias-card">
                         <i class="fas fa-exclamation-triangle" style="color: var(--vermelho);"></i>
                         <div class="kpi-value" id="kpi-anomalias">0</div>
                         <div class="kpi-label">Anomalias Detectadas</div>
+                        <div class="kpi-explanation">Valores fora do padrão</div>
+                    </div>
+                </div>
+
+                <!-- Botão para explicar KPIs -->
+                <div style="text-align: center; margin-bottom: 20px; display: none;" id="kpi-explanation-button-container">
+                    <button class="btn-purple" id="explain-kpis-btn">
+                        <i class="fas fa-question-circle"></i> Explicação dos Indicadores
+                    </button>
+                </div>
+                
+                <!-- Explicação dos KPIs -->
+                <div class="card" id="kpi-explanations" style="display: none;">
+                    <div class="card-header">
+                        <div class="card-title">Explicação dos Indicadores</div>
+                    </div>
+                    <div class="step-by-step">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div>
+                                <strong>Crescimento Mensal</strong>: Compara o total de impostos do mês atual com o mês anterior. 
+                                Valores positivos indicam aumento na arrecadação.
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div>
+                                <strong>Distribuição ISS/ICMS</strong>: Mostra a proporção entre os dois principais tributos. 
+                                Ajude a identificar dependência excessiva de um tributo específico.
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div>
+                                <strong>Tendência Trimestral</strong>: Analisa a direção geral dos impostos nos últimos 3 meses 
+                                comparado com o trimestre anterior. Indicador de tendência de médio prazo.
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div>
+                                <strong>Anomalias Detectadas</strong>: Identifica valores atípicos que podem indicar erros de 
+                                lançamento, pagamentos extraordinários ou inconsistências nos dados.
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -1969,6 +2061,19 @@
         </div>
         <div id="guide-content">
             <p>Bem-vindo ao sistema! Este guia irá ajudá-lo a utilizar as funcionalidades.</p>
+        </div>
+    </div>
+
+    <!-- Modal para detalhes dos KPIs -->
+    <div class="modal-overlay" id="kpi-detail-modal">
+        <div class="modal-content kpi-detail-modal">
+            <div class="modal-header">
+                <div class="modal-title" id="kpi-modal-title">Detalhes do Indicador</div>
+                <button class="modal-close" onclick="document.getElementById('kpi-detail-modal').style.display = 'none'">&times;</button>
+            </div>
+            <div id="kpi-modal-content" style="margin-top: 20px;">
+                <!-- Conteúdo será preenchido dinamicamente -->
+            </div>
         </div>
     </div>
 
@@ -3621,13 +3726,16 @@
                 atualizarKPIs: function(dados) {
                     const kpis = DataManager.calcularKPIs(dados);
                     const kpiContainer = document.getElementById('kpi-container');
+                    const explanationButton = document.getElementById('kpi-explanation-button-container');
                     
                     if (dados.length === 0) {
                         kpiContainer.style.display = 'none';
+                        explanationButton.style.display = 'none';
                         return;
                     }
                     
                     kpiContainer.style.display = 'grid';
+                    explanationButton.style.display = 'block';
                     
                     document.getElementById('kpi-crescimento').textContent = `${kpis.crescimento.toFixed(1)}%`;
                     document.getElementById('kpi-distribuicao').textContent = `${kpis.distribuicao.toFixed(1)}%`;
@@ -3803,6 +3911,341 @@
                     setTimeout(() => {
                         guide.style.display = 'none';
                     }, 10000);
+                },
+
+                // NOVAS FUNÇÕES PARA MELHORIA DOS KPIs
+                
+                // Explicar KPIs
+                explicarKPIs: function() {
+                    const kpiContainer = document.getElementById('kpi-explanations');
+                    if (kpiContainer.style.display === 'none') {
+                        kpiContainer.style.display = 'block';
+                        InterfaceManager.mostrarNotificacao('Explicações dos indicadores disponíveis', 'info');
+                    } else {
+                        kpiContainer.style.display = 'none';
+                    }
+                },
+
+                // Mostrar detalhes do KPI
+                mostrarDetalhesKPI: function(tipo, dados) {
+                    const modal = document.getElementById('kpi-detail-modal');
+                    const title = document.getElementById('kpi-modal-title');
+                    const content = document.getElementById('kpi-modal-content');
+                    
+                    let html = '';
+                    
+                    switch(tipo) {
+                        case 'crescimento':
+                            title.textContent = 'Detalhes do Crescimento Mensal';
+                            html = this.gerarDetalhesCrescimento(dados);
+                            break;
+                        case 'distribuicao':
+                            title.textContent = 'Detalhes da Distribuição ISS/ICMS';
+                            html = this.gerarDetalhesDistribuicao(dados);
+                            break;
+                        case 'tendencia':
+                            title.textContent = 'Detalhes da Tendência Trimestral';
+                            html = this.gerarDetalhesTendencia(dados);
+                            break;
+                        case 'anomalias':
+                            title.textContent = 'Detalhes das Anomalias Detectadas';
+                            html = this.gerarDetalhesAnomalias(dados);
+                            break;
+                    }
+                    
+                    content.innerHTML = html;
+                    modal.style.display = 'flex';
+                },
+
+                // Gerar detalhes do crescimento
+                gerarDetalhesCrescimento: function(dados) {
+                    if (dados.length === 0) return '<p>Nenhum dado disponível para análise.</p>';
+                    
+                    const meses = [...new Set(dados.map(d => `${d.mes}/${d.ano}`))].sort();
+                    if (meses.length < 2) return '<p>Dados insuficientes para calcular crescimento (mínimo 2 meses).</p>';
+                    
+                    const ultimoMes = meses[meses.length - 1];
+                    const penultimoMes = meses[meses.length - 2];
+                    
+                    const totalUltimo = dados
+                        .filter(d => `${d.mes}/${d.ano}` === ultimoMes)
+                        .reduce((sum, d) => sum + d.valor, 0);
+                        
+                    const totalPenultimo = dados
+                        .filter(d => `${d.mes}/${d.ano}` === penultimoMes)
+                        .reduce((sum, d) => sum + d.valor, 0);
+                    
+                    const crescimento = totalPenultimo > 0 ? 
+                        ((totalUltimo - totalPenultimo) / totalPenultimo) * 100 : 0;
+                    
+                    return `
+                        <div class="comparison-card">
+                            <div class="comparison-title">Comparativo Mensal</div>
+                            <p><strong>${penultimoMes}:</strong> R$ ${totalPenultimo.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</p>
+                            <p><strong>${ultimoMes}:</strong> R$ ${totalUltimo.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</p>
+                            <p><strong>Variação:</strong> 
+                                <span class="${crescimento >= 0 ? 'comparison-positive' : 'comparison-negative'}">
+                                    ${crescimento >= 0 ? '+' : ''}${crescimento.toFixed(2)}%
+                                    (R$ ${(totalUltimo - totalPenultimo).toLocaleString('pt-BR', { minimumFractionDigits: 2 })})
+                                </span>
+                            </p>
+                        </div>
+                        <div class="kpi-breakdown">
+                            <div class="breakdown-card">
+                                <div class="breakdown-title">ISS no ${ultimoMes}</div>
+                                <div class="breakdown-value">
+                                    R$ ${dados
+                                        .filter(d => `${d.mes}/${d.ano}` === ultimoMes && d.tributo === 'ISS')
+                                        .reduce((sum, d) => sum + d.valor, 0)
+                                        .toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                </div>
+                            </div>
+                            <div class="breakdown-card">
+                                <div class="breakdown-title">ICMS no ${ultimoMes}</div>
+                                <div class="breakdown-value">
+                                    R$ ${dados
+                                        .filter(d => `${d.mes}/${d.ano}` === ultimoMes && d.tributo === 'ICMS')
+                                        .reduce((sum, d) => sum + d.valor, 0)
+                                        .toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <button class="btn-success" onclick="InterfaceManager.focarNoGrafico('evolucao-chart')">
+                                <i class="fas fa-chart-line"></i> Ver Gráfico de Evolução
+                            </button>
+                        </div>
+                    `;
+                },
+
+                // Gerar detalhes da distribuição
+                gerarDetalhesDistribuicao: function(dados) {
+                    if (dados.length === 0) return '<p>Nenhum dado disponível para análise.</p>';
+                    
+                    const totalISS = dados.filter(d => d.tributo === 'ISS').reduce((sum, d) => sum + d.valor, 0);
+                    const totalICMS = dados.filter(d => d.tributo === 'ICMS').reduce((sum, d) => sum + d.valor, 0);
+                    const totalGeral = totalISS + totalICMS;
+                    
+                    const percentISS = totalGeral > 0 ? (totalISS / totalGeral) * 100 : 0;
+                    const percentICMS = totalGeral > 0 ? (totalICMS / totalGeral) * 100 : 0;
+                    
+                    return `
+                        <div class="comparison-card">
+                            <div class="comparison-title">Distribuição por Tributo</div>
+                            <p><strong>ISS:</strong> R$ ${totalISS.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} (${percentISS.toFixed(1)}%)</p>
+                            <p><strong>ICMS:</strong> R$ ${totalICMS.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} (${percentICMS.toFixed(1)}%)</p>
+                            <p><strong>Total Geral:</strong> R$ ${totalGeral.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</p>
+                        </div>
+                        <div class="data-quality-indicator" style="margin-top: 15px;">
+                            <div>Balanceamento:</div>
+                            <div class="quality-bar">
+                                <div class="quality-fill quality-good" style="width: ${percentISS}%;"></div>
+                            </div>
+                            <div>ISS</div>
+                            <div class="quality-bar">
+                                <div class="quality-fill quality-warning" style="width: ${percentICMS}%;"></div>
+                            </div>
+                            <div>ICMS</div>
+                        </div>
+                        <div class="kpi-breakdown">
+                            <div class="breakdown-card">
+                                <div class="breakdown-title">Maior Contribuinte ISS</div>
+                                <div class="breakdown-value">
+                                    ${this.obterMaiorContribuinte(dados, 'ISS')}
+                                </div>
+                            </div>
+                            <div class="breakdown-card">
+                                <div class="breakdown-title">Maior Contribuinte ICMS</div>
+                                <div class="breakdown-value">
+                                    ${this.obterMaiorContribuinte(dados, 'ICMS')}
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <button class="btn-success" onclick="InterfaceManager.focarNoGrafico('empresas-chart')">
+                                <i class="fas fa-chart-pie"></i> Ver Gráfico de Distribuição
+                            </button>
+                        </div>
+                    `;
+                },
+
+                // Gerar detalhes da tendência
+                gerarDetalhesTendencia: function(dados) {
+                    if (dados.length === 0) return '<p>Nenhum dado disponível para análise.</p>';
+                    
+                    const meses = [...new Set(dados.map(d => `${d.mes}/${d.ano}`))].sort();
+                    if (meses.length < 4) return '<p>Dados insuficientes para calcular tendência (mínimo 4 meses).</p>';
+                    
+                    const ultimoTrimestre = meses.slice(-3);
+                    const trimestreAnterior = meses.slice(-6, -3);
+                    
+                    const totalUltimoTrimestre = dados
+                        .filter(d => ultimoTrimestre.includes(`${d.mes}/${d.ano}`))
+                        .reduce((sum, d) => sum + d.valor, 0);
+                        
+                    const totalTrimestreAnterior = dados
+                        .filter(d => trimestreAnterior.includes(`${d.mes}/${d.ano}`))
+                        .reduce((sum, d) => sum + d.valor, 0);
+                        
+                    const tendencia = totalTrimestreAnterior > 0 ?
+                        ((totalUltimoTrimestre - totalTrimestreAnterior) / totalTrimestreAnterior) * 100 : 0;
+                    
+                    return `
+                        <div class="comparison-card">
+                            <div class="comparison-title">Comparativo Trimestral</div>
+                            <p><strong>Trimestre Anterior (${trimestreAnterior[0]} a ${trimestreAnterior[trimestreAnterior.length-1]}):</strong> 
+                                R$ ${totalTrimestreAnterior.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</p>
+                            <p><strong>Último Trimestre (${ultimoTrimestre[0]} a ${ultimoTrimestre[ultimoTrimestre.length-1]}):</strong> 
+                                R$ ${totalUltimoTrimestre.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</p>
+                            <p><strong>Tendência:</strong> 
+                                <span class="${tendencia >= 0 ? 'comparison-positive' : 'comparison-negative'}">
+                                    ${tendencia >= 0 ? '+' : ''}${tendencia.toFixed(2)}%
+                                    (R$ ${(totalUltimoTrimestre - totalTrimestreAnterior).toLocaleString('pt-BR', { minimumFractionDigits: 2 })})
+                                </span>
+                            </p>
+                        </div>
+                        <div class="kpi-breakdown">
+                            <div class="breakdown-card">
+                                <div class="breakdown-title">Média Mensal Último Trimestre</div>
+                                <div class="breakdown-value">
+                                    R$ ${(totalUltimoTrimestre / 3).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                </div>
+                            </div>
+                            <div class="breakdown-card">
+                                <div class="breakdown-title">Média Mensal Trimestre Anterior</div>
+                                <div class="breakdown-value">
+                                    R$ ${(totalTrimestreAnterior / 3).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <button class="btn-success" onclick="InterfaceManager.focarNoGrafico('evolucao-chart')">
+                                <i class="fas fa-chart-line"></i> Ver Gráfico de Evolução
+                            </button>
+                        </div>
+                    `;
+                },
+
+                // Gerar detalhes das anomalias
+                gerarDetalhesAnomalias: function(dados) {
+                    if (dados.length === 0) return '<p>Nenhum dado disponível para análise.</p>';
+                    
+                    const anomalias = DataManager.detectarValoresAtipicos(dados);
+                    
+                    if (anomalias.length === 0) {
+                        return `
+                            <div class="comparison-card">
+                                <div class="comparison-title">Análise de Anomalias</div>
+                                <p>Nenhuma anomalia detectada nos dados atuais.</p>
+                                <p><small>As anomalias são identificadas usando o método de desvio padrão (valores além de 2 desvios padrão da média).</small></p>
+                            </div>
+                        `;
+                    }
+                    
+                    let html = `
+                        <div class="comparison-card">
+                            <div class="comparison-title">Análise de Anomalias</div>
+                            <p>Foram detectadas <strong>${anomalias.length}</strong> anomalias nos dados:</p>
+                            <ul style="margin-top: 10px; margin-left: 20px;">
+                    `;
+                    
+                    anomalias.slice(0, 5).forEach(anomalia => {
+                        const nivel = anomalia.nivel === 'alto' ? 'Alto' : 'Médio';
+                        html += `
+                            <li>
+                                <strong>${anomalia.empresa}</strong> - 
+                                ${this.formatarDataExibicao(anomalia.mes, anomalia.ano)} - 
+                                ${anomalia.tributo}: 
+                                R$ ${anomalia.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                <span class="status-indicator ${anomalia.nivel === 'alto' ? 'status-error' : 'status-processing'}">
+                                    ${nivel}
+                                </span>
+                            </li>
+                        `;
+                    });
+                    
+                    html += `</ul>`;
+                    
+                    if (anomalias.length > 5) {
+                        html += `<p>... e mais ${anomalias.length - 5} anomalias.</p>`;
+                    }
+                    
+                    html += `
+                            <p style="margin-top: 10px;"><small>Metodologia: Valores além de 2 desvios padrão da média são considerados anomalias. 
+                            Valores além de 3 desvios padrão são classificados como "Alto".</small></p>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <button class="btn-success" onclick="InterfaceManager.filtrarAnomalias()">
+                                <i class="fas fa-filter"></i> Filtrar por Anomalias
+                            </button>
+                        </div>
+                    `;
+                    
+                    return html;
+                },
+
+                // Obter maior contribuinte
+                obterMaiorContribuinte: function(dados, tributo) {
+                    const dadosFiltrados = dados.filter(d => d.tributo === tributo);
+                    if (dadosFiltrados.length === 0) return 'N/A';
+                    
+                    const totaisPorEmpresa = {};
+                    dadosFiltrados.forEach(d => {
+                        if (!totaisPorEmpresa[d.empresa]) {
+                            totaisPorEmpresa[d.empresa] = 0;
+                        }
+                        totaisPorEmpresa[d.empresa] += d.valor;
+                    });
+                    
+                    const maiorEmpresa = Object.keys(totaisPorEmpresa).reduce((a, b) => 
+                        totaisPorEmpresa[a] > totaisPorEmpresa[b] ? a : b
+                    );
+                    
+                    return `${maiorEmpresa} (R$ ${totaisPorEmpresa[maiorEmpresa].toLocaleString('pt-BR', { minimumFractionDigits: 2 })})`;
+                },
+
+                // Focar em gráfico específico
+                focarNoGrafico: function(chartId) {
+                    document.getElementById('kpi-detail-modal').style.display = 'none';
+                    
+                    // Rolar até o gráfico
+                    const chartElement = document.getElementById(chartId);
+                    if (chartElement) {
+                        chartElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        
+                        // Destacar o gráfico
+                        chartElement.style.boxShadow = '0 0 0 3px var(--azul)';
+                        setTimeout(() => {
+                            chartElement.style.boxShadow = '';
+                        }, 2000);
+                    }
+                },
+
+                // Filtrar por anomalias
+                filtrarAnomalias: function() {
+                    const dados = DataManager.getDados();
+                    const anomalias = DataManager.detectarValoresAtipicos(dados);
+                    
+                    if (anomalias.length === 0) {
+                        this.mostrarNotificacao('Nenhuma anomalia para filtrar', 'info');
+                        return;
+                    }
+                    
+                    // Fechar modal
+                    document.getElementById('kpi-detail-modal').style.display = 'none';
+                    
+                    // Mostrar notificação
+                    this.mostrarNotificacao(`Filtrando ${anomalias.length} anomalias`, 'info');
+                    
+                    // Aqui você pode implementar a lógica para filtrar a tabela por anomalias
+                    // Por enquanto, apenas destacamos na interface
+                    setTimeout(() => {
+                        const searchInput = document.getElementById('search-input');
+                        if (searchInput) {
+                            searchInput.value = 'anomalia';
+                            searchInput.dispatchEvent(new Event('input'));
+                        }
+                    }, 500);
                 },
                 
                 // Getters e setters para paginação/ordenação
@@ -4324,6 +4767,30 @@
             document.getElementById('close-guide').addEventListener('click', function() {
                 document.getElementById('interactive-guide').style.display = 'none';
             });
+
+            // NOVOS EVENTOS PARA MELHORIA DOS KPIs
+            
+            // Eventos de clique nos cards de KPI
+            document.getElementById('kpi-crescimento-card').addEventListener('click', function() {
+                InterfaceManager.mostrarDetalhesKPI('crescimento', DataManager.getDados());
+            });
+            
+            document.getElementById('kpi-distribuicao-card').addEventListener('click', function() {
+                InterfaceManager.mostrarDetalhesKPI('distribuicao', DataManager.getDados());
+            });
+            
+            document.getElementById('kpi-tendencia-card').addEventListener('click', function() {
+                InterfaceManager.mostrarDetalhesKPI('tendencia', DataManager.getDados());
+            });
+            
+            document.getElementById('kpi-anomalias-card').addEventListener('click', function() {
+                InterfaceManager.mostrarDetalhesKPI('anomalias', DataManager.getDados());
+            });
+            
+            // Botão para explicar KPIs
+            document.getElementById('explain-kpis-btn').addEventListener('click', function() {
+                InterfaceManager.explicarKPIs();
+            });
         }
 
         // Funções de processamento de arquivo - CORRIGIDAS
@@ -4580,6 +5047,8 @@
             document.querySelector('.last-update span').textContent = 'Nenhum dado importado ainda';
             document.querySelector('.data-summary').style.display = 'none';
             document.getElementById('kpi-container').style.display = 'none';
+            document.getElementById('kpi-explanation-button-container').style.display = 'none';
+            document.getElementById('kpi-explanations').style.display = 'none';
             document.getElementById('aplicar-filtros').disabled = true;
             document.querySelectorAll('.chart-actions button').forEach(btn => {
                 btn.disabled = true;
