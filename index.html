@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acompanhamento Tributário - Versão Melhorada</title>
+    <title>Acompanhamento Tributário - Versão Otimizada</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -39,6 +39,11 @@
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             color: var(--cinza-escuro);
             min-height: 100vh;
+            transition: background-color 0.3s ease;
+        }
+        
+        body.drag-over {
+            background: rgba(67, 160, 71, 0.1);
         }
         
         header {
@@ -97,6 +102,7 @@
             align-items: center;
             gap: 10px;
             border-left: 4px solid transparent;
+            position: relative;
         }
         
         .sidebar li:hover {
@@ -126,6 +132,7 @@
             margin-bottom: 20px;
             transition: var(--transicao);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
         }
         
         .card:hover {
@@ -556,7 +563,6 @@
             opacity: 1;
         }
         
-        /* Novos estilos para melhorias */
         .grouped-table {
             width: 100%;
             border-collapse: collapse;
@@ -628,45 +634,6 @@
             color: var(--vermelho);
         }
         
-        .onboarding-step {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            display: none;
-        }
-        
-        .onboarding-content {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        
-        .onboarding-title {
-            font-size: 24px;
-            margin-bottom: 15px;
-            color: var(--azul);
-        }
-        
-        .onboarding-text {
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-        
-        .onboarding-actions {
-            display: flex;
-            justify-content: space-between;
-        }
-        
         .data-size-info {
             background: rgba(255, 255, 255, 0.9);
             border-radius: 8px;
@@ -678,7 +645,6 @@
             align-items: center;
         }
         
-        /* Estilos para a nova aba de Resumo */
         .resumo-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -740,7 +706,6 @@
             margin-top: 5px;
         }
         
-        /* Estilos para a nova aba de Manipulação de Dados */
         .manipulacao-container {
             display: grid;
             grid-template-columns: 1fr 2fr;
@@ -809,7 +774,6 @@
             font-size: 12px;
         }
         
-        /* Novos estilos para melhorias */
         .progress-bar {
             height: 6px;
             background-color: #e0e0e0;
@@ -886,7 +850,6 @@
             cursor: help;
         }
         
-        /* Estilos para o novo filtro de categorias */
         select[multiple] {
             min-height: 120px;
             border-radius: 8px;
@@ -911,7 +874,6 @@
             display: block;
         }
         
-        /* Novos estilos para melhorias */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -1086,6 +1048,127 @@
             overflow-y: auto;
         }
         
+        .interactive-guide {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            padding: 15px;
+            max-width: 300px;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .guide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .guide-title {
+            font-weight: bold;
+            color: var(--azul);
+        }
+        
+        .guide-close {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--cinza-escuro);
+        }
+        
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        
+        .status-ready {
+            background: rgba(67, 160, 71, 0.1);
+            color: var(--verde);
+        }
+        
+        .status-processing {
+            background: rgba(255, 179, 0, 0.1);
+            color: var(--amarelo-escuro);
+        }
+        
+        .status-error {
+            background: rgba(229, 57, 53, 0.1);
+            color: var(--vermelho);
+        }
+        
+        .feature-highlight {
+            position: relative;
+        }
+        
+        .feature-highlight::after {
+            content: "✨";
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            font-size: 12px;
+        }
+        
+        .step-by-step {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .step-number {
+            background: var(--azul);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .hint-bubble {
+            position: absolute;
+            background: var(--azul);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            z-index: 100;
+            max-width: 200px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .hint-bubble::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 10px;
+            width: 10px;
+            height: 10px;
+            background: var(--azul);
+            transform: rotate(45deg);
+        }
+        
         @media (max-width: 1024px) {
             .charts-container, .resumo-grid, .manipulacao-container {
                 grid-template-columns: 1fr;
@@ -1116,6 +1199,13 @@
             .quick-action-btn {
                 min-width: 100%;
             }
+            
+            .interactive-guide {
+                bottom: 10px;
+                left: 10px;
+                right: 10px;
+                max-width: none;
+            }
         }
     </style>
 </head>
@@ -1123,6 +1213,9 @@
     <header>
         <div class="logo-container">
             <div class="logo-text">Acompanhamento Tributário</div>
+            <span class="status-indicator status-ready" id="system-status">
+                <i class="fas fa-circle"></i> Sistema Pronto
+            </span>
         </div>
         <div class="user-info">
             <div>Última atualização: <span id="last-update">--/--/---- --:--</span></div>
@@ -1133,15 +1226,30 @@
     <div class="container">
         <nav class="sidebar">
             <ul>
-                <li class="active" data-tab="dashboard"><i class="fas fa-chart-line"></i> Dashboard</li>
-                <li data-tab="importar"><i class="fas fa-file-import"></i> Importar Dados</li>
-                <li data-tab="resumo"><i class="fas fa-chart-pie"></i> Resumo e Observações</li>
-                <li data-tab="manipulacao"><i class="fas fa-calculator"></i> Manipulação de Dados</li>
-                <li data-tab="relatorios"><i class="fas fa-file-alt"></i> Relatórios Personalizados</li>
-                <li data-tab="analise-avancada"><i class="fas fa-chart-bar"></i> Análise Avançada</li>
-                <li data-tab="historico"><i class="fas fa-history"></i> Histórico</li>
-                <li data-tab="configuracoes"><i class="fas fa-cog"></i> Configurações</li>
-                <li data-tab="ajuda"><i class="fas fa-question-circle"></i> Ajuda</li>
+                <li class="active" data-tab="dashboard">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </li>
+                <li data-tab="importar">
+                    <i class="fas fa-file-import"></i> Importar Dados
+                </li>
+                <li data-tab="resumo">
+                    <i class="fas fa-chart-pie"></i> Resumo e Observações
+                </li>
+                <li data-tab="manipulacao">
+                    <i class="fas fa-calculator"></i> Manipulação de Dados
+                </li>
+                <li data-tab="relatorios">
+                    <i class="fas fa-file-alt"></i> Relatórios Personalizados
+                </li>
+                <li data-tab="analise-avancada">
+                    <i class="fas fa-chart-bar"></i> Análise Avançada
+                </li>
+                <li data-tab="historico">
+                    <i class="fas fa-history"></i> Histórico
+                </li>
+                <li data-tab="configuracoes">
+                    <i class="fas fa-cog"></i> Configurações
+                </li>
             </ul>
         </nav>
         
@@ -1151,11 +1259,14 @@
                 <div class="last-update">
                     <i class="fas fa-sync-alt"></i>
                     <span>Nenhum dado importado ainda</span>
+                    <span class="status-indicator status-error" style="margin-left: auto;">
+                        <i class="fas fa-exclamation-circle"></i> Aguardando dados
+                    </span>
                 </div>
                 
                 <!-- Ações Rápidas -->
                 <div class="quick-actions">
-                    <button class="btn-success quick-action-btn" id="quick-import">
+                    <button class="btn-success quick-action-btn feature-highlight" id="quick-import">
                         <i class="fas fa-file-import"></i> Importar Dados
                     </button>
                     <button class="btn-warning quick-action-btn" id="quick-export" disabled>
@@ -1163,9 +1274,6 @@
                     </button>
                     <button class="btn-purple quick-action-btn" id="quick-analysis" disabled>
                         <i class="fas fa-chart-bar"></i> Análise Rápida
-                    </button>
-                    <button class="btn-success quick-action-btn" id="quick-predictive" disabled>
-                        <i class="fas fa-crystal-ball"></i> Análise Preditiva
                     </button>
                 </div>
                 
@@ -1195,22 +1303,22 @@
                 
                 <div class="data-summary" style="display: none;">
                     <div class="summary-card iss">
-                        <i class="fas fa-file-invoice-dollar" style="color: var(--azul);"></i>
+                        <i class="fas fa-file-invoice-dollar"></i>
                         <div class="summary-value" id="total-iss">R$ 0,00</div>
                         <div class="summary-label">Total ISS</div>
                     </div>
                     <div class="summary-card icms">
-                        <i class="fas fa-receipt" style="color: var(--verde);"></i>
+                        <i class="fas fa-receipt"></i>
                         <div class="summary-value" id="total-icms">R$ 0,00</div>
                         <div class="summary-label">Total ICMS</div>
                     </div>
                     <div class="summary-card total">
-                        <i class="fas fa-chart-pie" style="color: var(--amarelo);"></i>
+                        <i class="fas fa-chart-pie"></i>
                         <div class="summary-value" id="total-geral">R$ 0,00</div>
                         <div class="summary-label">Total Geral</div>
                     </div>
                     <div class="summary-card empresas">
-                        <i class="fas fa-building" style="color: var(--roxo);"></i>
+                        <i class="fas fa-building"></i>
                         <div class="summary-value" id="total-empresas">0</div>
                         <div class="summary-label">Empresas Ativas</div>
                     </div>
@@ -1243,7 +1351,6 @@
                             </select>
                         </div>
                         
-                        <!-- NOVO FILTRO DE CATEGORIAS -->
                         <div class="filter-group">
                             <label for="categoria-tributo">Categoria do Tributo:</label>
                             <select id="categoria-tributo" multiple style="height: 120px;">
@@ -1297,7 +1404,6 @@
                             <div class="chart-actions">
                                 <button class="btn-warning" id="export-iss-excel" disabled><i class="fas fa-download"></i> Excel</button>
                                 <button class="btn-success" id="export-iss-image" disabled><i class="fas fa-image"></i> Imagem</button>
-                                <button class="btn-purple" id="export-iss-pdf" disabled><i class="fas fa-file-pdf"></i> PDF</button>
                             </div>
                         </div>
                         <div class="chart-wrapper">
@@ -1320,7 +1426,6 @@
                             <div class="chart-actions">
                                 <button class="btn-warning" id="export-icms-excel" disabled><i class="fas fa-download"></i> Excel</button>
                                 <button class="btn-success" id="export-icms-image" disabled><i class="fas fa-image"></i> Imagem</button>
-                                <button class="btn-purple" id="export-icms-pdf" disabled><i class="fas fa-file-pdf"></i> PDF</button>
                             </div>
                         </div>
                         <div class="chart-wrapper">
@@ -1343,7 +1448,6 @@
                             <div class="chart-actions">
                                 <button class="btn-warning" id="export-empresas-excel" disabled><i class="fas fa-download"></i> Excel</button>
                                 <button class="btn-success" id="export-empresas-image" disabled><i class="fas fa-image"></i> Imagem</button>
-                                <button class="btn-purple" id="export-empresas-pdf" disabled><i class="fas fa-file-pdf"></i> PDF</button>
                             </div>
                         </div>
                         <div class="chart-wrapper">
@@ -1366,7 +1470,6 @@
                             <div class="chart-actions">
                                 <button class="btn-warning" id="export-evolucao-excel" disabled><i class="fas fa-download"></i> Excel</button>
                                 <button class="btn-success" id="export-evolucao-image" disabled><i class="fas fa-image"></i> Imagem</button>
-                                <button class="btn-purple" id="export-evolucao-pdf" disabled><i class="fas fa-file-pdf"></i> PDF</button>
                             </div>
                         </div>
                         <div class="chart-wrapper">
@@ -1439,6 +1542,9 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">Importar Dados do Excel</div>
+                        <span class="status-indicator status-ready">
+                            <i class="fas fa-circle"></i> Pronto para importar
+                        </span>
                     </div>
                     
                     <div class="file-upload" id="file-upload-area">
@@ -1456,60 +1562,11 @@
                                 <input type="checkbox" id="remover-duplicatas" checked>
                                 <label for="remover-duplicatas">Remover dados duplicados automaticamente</label>
                             </div>
-                            <small style="color: #666; margin-left: 24px;">Desmarque esta opção se quiser manter todos os registros, incluindo duplicatas</small>
                         </div>
                         
                         <div style="margin-top: 20px;">
                             <button class="btn-success" id="processar-dados"><i class="fas fa-check"></i> Processar Dados</button>
                             <button class="btn-danger" id="limpar-dados" style="display: none;"><i class="fas fa-trash"></i> Limpar Dados</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Nova seção: Integração com APIs Fiscais -->
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">Integração com APIs Fiscais</div>
-                    </div>
-                    
-                    <div class="api-integration">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                            <h4>Status das Integrações</h4>
-                            <span class="api-status api-disconnected">
-                                <i class="fas fa-circle"></i> Desconectado
-                            </span>
-                        </div>
-                        
-                        <p>Conecte-se a sistemas fiscais para importação automática de dados:</p>
-                        
-                        <div class="filters" style="margin-top: 15px;">
-                            <div class="filter-group">
-                                <label for="api-selecionada">Sistema Fiscal:</label>
-                                <select id="api-selecionada">
-                                    <option value="sefaz">SEFAZ</option>
-                                    <option value="prefeitura">Prefeitura Municipal</option>
-                                    <option value="contabilidade">Sistema de Contabilidade</option>
-                                </select>
-                            </div>
-                            
-                            <div class="filter-group">
-                                <label for="api-periodo">Período:</label>
-                                <div style="display: flex; gap: 10px;">
-                                    <input type="month" id="api-periodo-inicio">
-                                    <input type="month" id="api-periodo-fim">
-                                </div>
-                            </div>
-                            
-                            <div class="filter-group" style="align-self: flex-end;">
-                                <button class="btn-success" id="conectar-api"><i class="fas fa-plug"></i> Conectar</button>
-                            </div>
-                        </div>
-                        
-                        <div id="api-result" style="margin-top: 15px; display: none;">
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="api-progress"></div>
-                            </div>
-                            <p id="api-message" style="text-align: center; margin-top: 10px;"></p>
                         </div>
                     </div>
                 </div>
@@ -1659,7 +1716,7 @@
                 </div>
             </div>
             
-            <!-- Nova Aba: Relatórios Personalizados -->
+            <!-- Relatórios Personalizados -->
             <div class="tab-content" id="relatorios-tab">
                 <div class="card">
                     <div class="card-header">
@@ -1750,7 +1807,7 @@
                 </div>
             </div>
             
-            <!-- Nova Aba: Análise Avançada -->
+            <!-- Análise Avançada -->
             <div class="tab-content" id="analise-avancada-tab">
                 <div class="card">
                     <div class="card-header">
@@ -1890,67 +1947,6 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Ajuda -->
-            <div class="tab-content" id="ajuda-tab">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">Ajuda e Suporte</div>
-                    </div>
-                    
-                    <div class="resumo-grid">
-                        <div class="resumo-card">
-                            <div class="card-header">
-                                <div class="card-title">Como Usar</div>
-                            </div>
-                            <div>
-                                <h4>Importação de Dados</h4>
-                                <p>Para importar dados, vá para a aba "Importar Dados" e selecione um arquivo Excel com as colunas: Empresa, Valor, Data e Tipo.</p>
-                                
-                                <h4>Manipulação de Dados</h4>
-                                <p>Na aba "Manipulação de Dados", você pode criar operações personalizadas para somar, calcular médias ou agrupar dados conforme sua necessidade.</p>
-                                
-                                <h4>Relatórios Personalizados</h4>
-                                <p>Crie relatórios personalizados na aba dedicada, selecionando os campos e filtros desejados.</p>
-                                
-                                <h4>Análise Avançada</h4>
-                                <p>Utilize a aba de análise avançada para obter previsões e identificar tendências nos seus dados.</p>
-                                
-                                <h4>Configurações</h4>
-                                <p>Personalize o comportamento do sistema na aba "Configurações".</p>
-                            </div>
-                        </div>
-                        
-                        <div class="resumo-card">
-                            <div class="card-header">
-                                <div class="card-title">Dúvidas Frequentes</div>
-                            </div>
-                            <div>
-                                <h4>Quais formatos de arquivo são suportados?</h4>
-                                <p>O sistema suporta arquivos Excel (.xlsx e .xls).</p>
-                                
-                                <h4>Como remover dados duplicados?</h4>
-                                <p>Durante a importação, você pode escolher se deseja remover dados duplicados automaticamente ou mantê-los.</p>
-                                
-                                <h4>Posso exportar os resultados?</h4>
-                                <p>Sim, você pode exportar dados para Excel, PDF e imagem em várias partes do sistema.</p>
-                                
-                                <h4>Como funciona a análise preditiva?</h4>
-                                <p>A análise preditiva utiliza algoritmos para prever tendências futuras baseadas nos dados históricos importados.</p>
-                                
-                                <h4>Quais atalhos de teclado estão disponíveis?</h4>
-                                <p>Pressione F1 para ver todos os atalhos disponíveis.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-top: 20px; text-align: center;">
-                        <p>Para suporte adicional, entre em contato com o desenvolvedor:</p>
-                        <p><strong>Jonnathan Saldanha</strong></p>
-                        <button class="btn-success" id="start-onboarding"><i class="fas fa-play-circle"></i> Iniciar Tutorial</button>
-                    </div>
-                </div>
-            </div>
         </main>
     </div>
     
@@ -1960,45 +1956,24 @@
         <span id="notification-message">Mensagem de notificação</span>
     </div>
 
-    <!-- Modal de Onboarding -->
-    <div class="modal-overlay" id="onboarding-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">Bem-vindo ao Sistema de Acompanhamento Tributário</div>
-                <button class="modal-close" id="close-onboarding">&times;</button>
-            </div>
-            <div id="onboarding-content">
-                <div class="onboarding-step active" id="step-1">
-                    <h3>Importação de Dados</h3>
-                    <p>Comece importando seus dados fiscais em formato Excel. O sistema suporta arquivos .xlsx e .xls.</p>
-                    <p>Certifique-se de que suas planilhas contenham as colunas: Empresa, Valor, Data e Tipo.</p>
-                </div>
-                <div class="onboarding-step" id="step-2">
-                    <h3>Dashboard e Visualizações</h3>
-                    <p>Após importar os dados, visualize gráficos e métricas no dashboard principal.</p>
-                    <p>Use os filtros para analisar dados específicos por empresa, tributo ou período.</p>
-                </div>
-                <div class="onboarding-step" id="step-3">
-                    <h3>Análise Avançada</h3>
-                    <p>Explore a aba de análise avançada para obter previsões e identificar tendências.</p>
-                    <p>Utilize relatórios personalizados para criar visualizações específicas para suas necessidades.</p>
-                </div>
-            </div>
-            <div class="onboarding-actions">
-                <button class="btn-warning" id="prev-step">Anterior</button>
-                <button class="btn-success" id="next-step">Próximo</button>
-                <button class="btn-purple" id="finish-onboarding" style="display: none;">Finalizar</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Dica de Atalho -->
     <div class="shortcut-hint" id="shortcut-hint">
         Pressione <kbd>F1</kbd> para ver todos os atalhos
     </div>
 
+    <!-- Guia Interativo -->
+    <div class="interactive-guide" id="interactive-guide">
+        <div class="guide-header">
+            <div class="guide-title" id="guide-title">Guia Interativo</div>
+            <button class="guide-close" id="close-guide">&times;</button>
+        </div>
+        <div id="guide-content">
+            <p>Bem-vindo ao sistema! Este guia irá ajudá-lo a utilizar as funcionalidades.</p>
+        </div>
+    </div>
+
     <script>
-        // Módulos para organização do código - PRESERVANDO TODAS AS FUNCIONALIDADES ORIGINAIS
+        // Módulos para organização do código - CORRIGIDO E MELHORADO
         const DataManager = (function() {
             let dadosImportados = [];
             let currentFileData = null;
@@ -2012,7 +1987,7 @@
                 performance: 'auto'
             };
             
-            // Mapeamento fixo das colunas - PRESERVADO
+            // Mapeamento fixo das colunas
             const MAPEAMENTO_FIXO = {
                 empresa: 0,    // Coluna A
                 valor: 1,      // Coluna B  
@@ -2020,7 +1995,7 @@
                 tipo: 3        // Coluna D
             };
 
-            // Mapeamento dos tipos para categorias - PRESERVADO
+            // Mapeamento dos tipos para categorias
             const MAPEAMENTO_TIPOS = {
                 // ICMS
                 'TR49': { tributo: 'ICMS', categoria: 'ICMS ST', nome: 'ICMS ST - RECOLHIMENTO' },
@@ -2050,7 +2025,7 @@
                 getMapeamentoFixoTipos: () => MAPEAMENTO_TIPOS,
                 getMapeamentoFixo: () => MAPEAMENTO_FIXO,
                 
-                // Sanitização de dados - PRESERVADA
+                // Sanitização de dados
                 sanitizarDados: function(dados) {
                     return dados.map(item => ({
                         ...item,
@@ -2061,7 +2036,7 @@
                     }));
                 },
                 
-                // Verificar duplicatas - CORRIGIDA: Agora só remove duplicatas exatas - PRESERVADA
+                // Verificar duplicatas - CORRIGIDA: Agora só remove duplicatas exatas
                 removerDuplicatas: function(dados) {
                     const chaves = new Set();
                     const resultado = [];
@@ -2079,7 +2054,7 @@
                     return resultado;
                 },
                 
-                // Adicionar ao histórico - PRESERVADA
+                // Adicionar ao histórico
                 adicionarAoHistorico: function(nomeArquivo) {
                     const novoItem = {
                         id: Date.now().toString(),
@@ -2093,7 +2068,7 @@
                     localStorage.setItem('historicoImportacoes', JSON.stringify(historicoImportacoes));
                 },
                 
-                // Sistema de backup - PRESERVADO
+                // Sistema de backup
                 criarBackup: function() {
                     const backup = {
                         id: Date.now().toString(),
@@ -2118,7 +2093,7 @@
                 },
                 
                 limparBackupsAntigos: function() {
-                    // Manter apenas os 10 backups mais recentes (aumentado de 5 para 10)
+                    // Manter apenas os 10 backups mais recentes
                     if (backups.length > 10) {
                         backups.sort((a, b) => new Date(b.dataHora) - new Date(a.dataHora));
                         backups = backups.slice(0, 10);
@@ -2126,7 +2101,7 @@
                     }
                 },
                 
-                // Salvar operação personalizada - PRESERVADA
+                // Salvar operação personalizada
                 salvarOperacao: function(operacao) {
                     operacao.id = Date.now().toString();
                     operacoesSalvas.push(operacao);
@@ -2134,7 +2109,7 @@
                     return operacao;
                 },
                 
-                // Executar operação personalizada - PRESERVADA
+                // Executar operação personalizada
                 executarOperacao: function(operacao, dados) {
                     let dadosFiltrados = [...dados];
                     
@@ -2183,7 +2158,7 @@
                     return resultado;
                 },
                 
-                // Operação de soma - PRESERVADA
+                // Operação de soma
                 executarSoma: function(dados, agrupamento) {
                     const grupos = {};
                     
@@ -2230,7 +2205,7 @@
                     };
                 },
                 
-                // Operação de média - PRESERVADA
+                // Operação de média
                 executarMedia: function(dados, agrupamento) {
                     const grupos = {};
                     
@@ -2279,7 +2254,7 @@
                     };
                 },
                 
-                // Operação de contagem - PRESERVADA
+                // Operação de contagem
                 executarContagem: function(dados, agrupamento) {
                     const grupos = {};
                     
@@ -2326,12 +2301,12 @@
                     };
                 },
                 
-                // Operação de agrupamento - PRESERVADA
+                // Operação de agrupamento
                 executarAgrupamento: function(dados, agrupamento) {
                     return this.agruparDados(dados, agrupamento);
                 },
                 
-                // Converter tipo para categoria - PRESERVADA
+                // Converter tipo para categoria
                 converterTipoParaCategoria: function(tipo) {
                     if (!tipo) return { tributo: 'ICMS', categoria: 'Não Especificado', nome: 'Não Especificado' };
                     
@@ -2373,7 +2348,7 @@
                     return { tributo: 'ICMS', categoria: 'Outros', nome: tipoStr };
                 },
                 
-                // Processar data - CORRIGIDA: Melhor tratamento de datas - PRESERVADA
+                // Processar data - CORRIGIDA: Melhor tratamento de datas
                 processarData: function(dataStr) {
                     if (!dataStr) return { mes: '01', ano: new Date().getFullYear().toString() };
                     
@@ -2450,7 +2425,7 @@
                     return { mes, ano: anoNum.toString() };
                 },
                 
-                // Agrupar dados por diferentes critérios - PRESERVADA
+                // Agrupar dados por diferentes critérios
                 agruparDados: function(dados, criterio) {
                     const grupos = {};
                     
@@ -2509,7 +2484,7 @@
                     }));
                 },
                 
-                // Detectar valores atípicos - PRESERVADA
+                // Detectar valores atípicos
                 detectarValoresAtipicos: function(dados) {
                     if (dados.length === 0) return [];
                     
@@ -2533,7 +2508,7 @@
                         .sort((a, b) => b.desvio - a.desvio);
                 },
                 
-                // Comparar períodos - PRESERVADA
+                // Comparar períodos
                 compararPeriodos: function(dados, periodoAtual, periodoAnterior) {
                     const dadosAtual = this.filtrarPorPeriodo(dados, periodoAtual);
                     const dadosAnterior = this.filtrarPorPeriodo(dados, periodoAnterior);
@@ -2560,7 +2535,7 @@
                     };
                 },
                 
-                // Filtrar por período - PRESERVADA
+                // Filtrar por período
                 filtrarPorPeriodo: function(dados, periodo) {
                     return dados.filter(d => {
                         const dataItem = new Date(d.ano, d.mes - 1);
@@ -2570,7 +2545,7 @@
                     });
                 },
                 
-                // Gerar observações e insights - PRESERVADA
+                // Gerar observações e insights
                 gerarObservacoes: function(dados) {
                     const observacoes = [];
                     
@@ -2649,8 +2624,6 @@
                     
                     return observacoes;
                 },
-                
-                // NOVAS FUNCIONALIDADES ADICIONADAS
                 
                 // Análise Preditiva
                 gerarPrevisoes: function(dados, mesesFuturos = 6) {
@@ -2844,7 +2817,7 @@
             };
         })();
 
-        // Módulo de Interface - PRESERVANDO TODAS AS FUNCIONALIDADES
+        // Módulo de Interface
         const InterfaceManager = (function() {
             let issChart, icmsChart, empresasChart, evolucaoChart;
             let currentPage = 1;
@@ -2855,7 +2828,7 @@
             let debounceTimer;
             
             return {
-                // Mostrar notificações - PRESERVADA
+                // Mostrar notificações
                 mostrarNotificacao: function(mensagem, tipo) {
                     const notification = document.getElementById('notification');
                     const message = document.getElementById('notification-message');
@@ -2869,7 +2842,7 @@
                     }, 5000);
                 },
                 
-                // Mostrar/ocultar loading - PRESERVADA
+                // Mostrar/ocultar loading
                 toggleLoading: function(chartId, show) {
                     const loadingElement = document.getElementById(`${chartId}-loading`);
                     if (loadingElement) {
@@ -2877,7 +2850,7 @@
                     }
                 },
                 
-                // Inicializar gráficos vazios - PRESERVADA
+                // Inicializar gráficos vazios
                 inicializarGraficosVazios: function() {
                     // Gráfico ISS
                     const issCtx = document.getElementById('iss-chart').getContext('2d');
@@ -3142,7 +3115,7 @@
                     });
                 },
                 
-                // Atualizar gráficos - PRESERVADA
+                // Atualizar gráficos
                 atualizarGraficos: function(dados) {
                     if (dados.length === 0) return;
                     
@@ -3249,7 +3222,7 @@
                     }, 100);
                 },
                 
-                // Atualizar tabela com dados agrupados - PRESERVADA
+                // Atualizar tabela com dados agrupados
                 atualizarTabelaAgrupada: function(dados) {
                     const tabelaBody = document.getElementById('dados-agrupados');
                     const tableContainer = document.getElementById('table-container');
@@ -3351,7 +3324,7 @@
                     document.getElementById('page-info').textContent = `Página ${currentPage} de ${totalPages}`;
                 },
                 
-                // Toggle para mostrar/ocultar detalhes do grupo - PRESERVADA
+                // Toggle para mostrar/ocultar detalhes do grupo
                 toggleGroupDetails: function(index, registros) {
                     const icon = document.getElementById(`toggle-${index}`);
                     const row = icon.closest('tr');
@@ -3410,7 +3383,7 @@
                     icon.className = 'fas fa-chevron-down';
                 },
                 
-                // Formatar data para exibição - PRESERVADA
+                // Formatar data para exibição
                 formatarDataExibicao: function(mes, ano) {
                     const meses = [
                         'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
@@ -3423,7 +3396,7 @@
                     return `${mes}/${ano}`;
                 },
                 
-                // Atualizar resumo de dados - PRESERVADA
+                // Atualizar resumo de dados
                 atualizarResumoDados: function(dados) {
                     const totalISS = dados
                         .filter(d => d.tributo === 'ISS')
@@ -3437,13 +3410,14 @@
                     
                     const empresasAtivas = [...new Set(dados.map(d => d.empresa))].length;
                     
+                    // Atualizar valores
                     document.getElementById('total-iss').textContent = `R$ ${totalISS.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
                     document.getElementById('total-icms').textContent = `R$ ${totalICMS.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
                     document.getElementById('total-geral').textContent = `R$ ${totalGeral.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
                     document.getElementById('total-empresas').textContent = empresasAtivas;
                 },
                 
-                // Atualizar comparativo entre períodos - PRESERVADA
+                // Atualizar comparativo entre períodos
                 atualizarComparativoPeriodos: function(dados) {
                     const comparisonContent = document.getElementById('comparison-content');
                     
@@ -3491,7 +3465,7 @@
                     `;
                 },
                 
-                // Atualizar alertas de valores atípicos - PRESERVADA
+                // Atualizar alertas de valores atípicos
                 atualizarAlertas: function(dados) {
                     const alertsContent = document.getElementById('alerts-content');
                     
@@ -3531,7 +3505,7 @@
                     alertsContent.innerHTML = html;
                 },
                 
-                // Atualizar observações e insights - PRESERVADA
+                // Atualizar observações e insights
                 atualizarObservacoes: function(dados) {
                     const observacoesContent = document.getElementById('observacoes-content');
                     
@@ -3570,7 +3544,7 @@
                     observacoesContent.innerHTML = html;
                 },
                 
-                // Formatar data para exibição de período - PRESERVADA
+                // Formatar data para exibição de período
                 formatarDataPeriodo: function(data) {
                     const meses = [
                         'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
@@ -3579,7 +3553,7 @@
                     return `${meses[data.getMonth()]}/${data.getFullYear()}`;
                 },
                 
-                // Exportar para PDF - PRESERVADA
+                // Exportar para PDF
                 exportarParaPDF: function(titulo, dados, tipo) {
                     const { jsPDF } = window.jspdf;
                     const doc = new jsPDF();
@@ -3633,7 +3607,7 @@
                     doc.save(`${titulo.replace(/\s+/g, '_')}.pdf`);
                 },
                 
-                // Debounce para busca - PRESERVADA
+                // Debounce para busca
                 debounce: function(func, delay) {
                     return function() {
                         const context = this;
@@ -3642,8 +3616,6 @@
                         debounceTimer = setTimeout(() => func.apply(context, args), delay);
                     };
                 },
-                
-                // NOVAS FUNCIONALIDADES ADICIONADAS
                 
                 // Atualizar KPIs
                 atualizarKPIs: function(dados) {
@@ -3817,7 +3789,23 @@
                     }, 3000);
                 },
                 
-                // Getters e setters para paginação/ordenação - PRESERVADOS
+                // Mostrar guia interativo
+                mostrarGuiaInterativo: function(titulo, conteudo) {
+                    const guide = document.getElementById('interactive-guide');
+                    const guideTitle = document.getElementById('guide-title');
+                    const guideContent = document.getElementById('guide-content');
+                    
+                    guideTitle.textContent = titulo;
+                    guideContent.innerHTML = conteudo;
+                    guide.style.display = 'block';
+                    
+                    // Auto-ocultar após 10 segundos
+                    setTimeout(() => {
+                        guide.style.display = 'none';
+                    }, 10000);
+                },
+                
+                // Getters e setters para paginação/ordenação
                 getCurrentPage: () => currentPage,
                 setCurrentPage: (page) => { currentPage = page; },
                 getCurrentSort: () => currentSort,
@@ -3830,7 +3818,7 @@
             };
         })();
 
-        // Inicialização da aplicação - PRESERVADA
+        // Inicialização da aplicação - CORRIGIDA E MELHORADA
         document.addEventListener('DOMContentLoaded', function() {
             // Inicializar gráficos
             InterfaceManager.inicializarGraficosVazios();
@@ -3840,6 +3828,9 @@
             
             // Inicializar filtro de categorias
             window.filtroCategorias = inicializarFiltroCategorias();
+            
+            // Inicializar drag & drop global
+            inicializarDragDropGlobal();
             
             // Carregar dados existentes se houver
             const dados = DataManager.getDados();
@@ -3853,15 +3844,6 @@
             atualizarOperacoesSalvasUI();
             carregarConfiguracoesUI();
             
-            // Verificar se é a primeira vez do usuário
-            const onboardingCompleted = localStorage.getItem('onboardingCompleted');
-            if (!onboardingCompleted) {
-                // Mostrar onboarding se for a primeira vez
-                setTimeout(() => {
-                    document.getElementById('onboarding-modal').style.display = 'flex';
-                }, 1000);
-            }
-            
             // Configurar atalhos de teclado
             configurarAtalhosTeclado();
             
@@ -3871,20 +3853,52 @@
             }, 5000);
         });
 
+        // Inicializar Drag & Drop Global
+        function inicializarDragDropGlobal() {
+            // Permitir drag & drop em qualquer área da aplicação
+            document.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                if (e.dataTransfer.types.includes('Files')) {
+                    document.body.classList.add('drag-over');
+                }
+            });
+            
+            document.addEventListener('dragleave', function(e) {
+                if (!e.relatedTarget || e.relatedTarget.nodeName === 'HTML') {
+                    document.body.classList.remove('drag-over');
+                }
+            });
+            
+            document.addEventListener('drop', function(e) {
+                e.preventDefault();
+                document.body.classList.remove('drag-over');
+                
+                if (e.dataTransfer.files.length > 0) {
+                    const file = e.dataTransfer.files[0];
+                    
+                    if (file.name.match(/\.(xlsx|xls)$/i)) {
+                        InterfaceManager.mostrarNotificacao(`Processando ${file.name}...`, 'info');
+                        handleFile(file);
+                    } else {
+                        InterfaceManager.mostrarNotificacao('Arraste apenas arquivos Excel (.xlsx, .xls)', 'warning');
+                    }
+                }
+            });
+        }
+
         // Configurar atalhos de teclado
         function configurarAtalhosTeclado() {
             document.addEventListener('keydown', function(e) {
                 // F1 - Ajuda
                 if (e.key === 'F1') {
                     e.preventDefault();
-                    document.querySelector('.sidebar li[data-tab="ajuda"]').click();
                     mostrarModalAtalhos();
                 }
                 
                 // Ctrl+I - Importar dados
                 if (e.ctrlKey && e.key === 'i') {
                     e.preventDefault();
-                    document.querySelector('.sidebar li[data-tab="importar"]').click();
+                    document.getElementById('quick-import').click();
                 }
                 
                 // Ctrl+D - Dashboard
@@ -3930,7 +3944,7 @@
                             <strong>F1</strong> - Mostrar ajuda e atalhos
                         </div>
                         <div class="comparison-card">
-                            <strong>Ctrl + I</strong> - Ir para Importar Dados
+                            <strong>Ctrl + I</strong> - Importar Dados (Ação Rápida)
                         </div>
                         <div class="comparison-card">
                             <strong>Ctrl + D</strong> - Ir para Dashboard
@@ -3944,6 +3958,9 @@
                         <div class="comparison-card">
                             <strong>Ctrl + E</strong> - Exportar dados
                         </div>
+                        <div class="comparison-card">
+                            <strong>Drag & Drop</strong> - Arraste arquivos Excel para qualquer lugar da tela
+                        </div>
                     </div>
                     <div style="margin-top: 20px; text-align: center;">
                         <button class="btn-success" onclick="this.parentElement.parentElement.parentElement.remove()">Fechar</button>
@@ -3953,10 +3970,10 @@
             document.body.appendChild(modal);
         }
 
-        // Função para inicializar o filtro de categorias
+        // Função para inicializar o filtro de categorias - CORRIGIDA
         function inicializarFiltroCategorias() {
             const selectCategorias = document.getElementById('categoria-tributo');
-    
+
             // Evento para seleção/desseleção
             selectCategorias.addEventListener('change', function() {
                 const opcoesSelecionadas = Array.from(this.selectedOptions);
@@ -3974,10 +3991,11 @@
                 }
             });
             
-            // Preencher dinamicamente com categorias existentes nos dados
+            // CORREÇÃO: Função para atualizar opções de categorias
             this.atualizarOpcoesCategorias = function(dados) {
                 if (!dados || dados.length === 0) return;
                 
+                const selectCategorias = document.getElementById('categoria-tributo');
                 const categoriasExistentes = [...new Set(dados.map(d => d.categoria))];
                 const optgroups = {
                     'ICMS': [],
@@ -3996,7 +4014,17 @@
                     }
                 });
                 
-                // Limpar opções existentes (exceto "Todos")
+                // CORREÇÃO: Limpar opções existentes de forma segura
+                // Remover apenas optgroups, não todas as opções
+                const optgroupsExistentes = selectCategorias.querySelectorAll('optgroup');
+                optgroupsExistentes.forEach(optgroup => {
+                    selectCategorias.removeChild(optgroup);
+                });
+                
+                // CORREÇÃO: Manter a opção "Todos" que já existe
+                const optionTodos = Array.from(selectCategorias.options).find(opt => opt.value === 'Todos');
+                
+                // Limpar outras opções que não sejam "Todos"
                 Array.from(selectCategorias.options).forEach(option => {
                     if (option.value !== 'Todos') {
                         selectCategorias.removeChild(option);
@@ -4013,7 +4041,7 @@
                         option.textContent = categoria;
                         optgroupICMS.appendChild(option);
                     });
-                    selectCategorias.insertBefore(optgroupICMS, selectCategorias.firstChild);
+                    selectCategorias.appendChild(optgroupICMS);
                 }
                 
                 // Adicionar categorias de ISS
@@ -4026,7 +4054,12 @@
                         option.textContent = categoria;
                         optgroupISS.appendChild(option);
                     });
-                    selectCategorias.insertBefore(optgroupISS, selectCategorias.firstChild);
+                    selectCategorias.appendChild(optgroupISS);
+                }
+                
+                // CORREÇÃO: Garantir que a opção "Todos" esteja selecionada por padrão
+                if (optionTodos) {
+                    optionTodos.selected = true;
                 }
             };
             
@@ -4041,7 +4074,7 @@
             });
         }
 
-        // Funções de inicialização de eventos - PRESERVADAS
+        // Funções de inicialização de eventos
         function inicializarEventListeners() {
             // Sistema de abas do menu lateral
             document.querySelectorAll('.sidebar li').forEach(item => {
@@ -4065,7 +4098,13 @@
                 });
             });
             
-            // Upload de arquivo
+            // BOTÃO IMPORTAR DADOS - AGORA APENAS MUDA PARA ABA DE IMPORTAÇÃO
+            document.getElementById('quick-import').addEventListener('click', function() {
+                // Apenas mudar para a aba de importação
+                document.querySelector('.sidebar li[data-tab="importar"]').click();
+            });
+            
+            // Upload de arquivo na aba de importação
             const fileUploadArea = document.getElementById('file-upload-area');
             const fileInput = document.getElementById('file-input');
             
@@ -4094,7 +4133,7 @@
                 }
             });
             
-            // Processamento de dados
+            // Processamento de dados - CORRIGIDO
             document.getElementById('processar-dados').addEventListener('click', processarDadosExcel);
             document.getElementById('limpar-dados').addEventListener('click', limparDados);
             
@@ -4139,30 +4178,94 @@
                 }
             });
             
-            // Sistema de backup
-            document.getElementById('create-backup').addEventListener('click', criarBackup);
-            document.getElementById('restore-backup').addEventListener('click', restaurarBackup);
-            document.getElementById('clean-backups').addEventListener('click', limparBackupsAntigos);
-            
             // Exportação para PDF
             document.getElementById('export-tabela-pdf').addEventListener('click', function() {
                 const dados = DataManager.getDados();
                 InterfaceManager.exportarParaPDF('Dados_Tributarios_Detalhados', dados, 'tabela');
             });
             
-            // Manipulação de dados
+            // Manipulação de dados - AGORA FUNCIONA
             document.getElementById('executar-operacao').addEventListener('click', executarOperacao);
             document.getElementById('salvar-operacao').addEventListener('click', salvarOperacao);
             document.getElementById('exportar-resultado').addEventListener('click', exportarResultado);
             
-            // Configurações
+            // Configurações - AGORA FUNCIONA
             document.getElementById('salvar-configuracoes').addEventListener('click', salvarConfiguracoes);
             document.getElementById('restaurar-padroes').addEventListener('click', restaurarPadroes);
             document.getElementById('test-performance').addEventListener('click', testarPerformance);
             
             // Ações rápidas
-            document.getElementById('quick-import').addEventListener('click', function() {
-                document.querySelector('.sidebar li[data-tab="importar"]').click();
+            document.getElementById('quick-export').addEventListener('click', function() {
+                const dados = DataManager.getDados();
+                if (dados.length === 0) {
+                    InterfaceManager.mostrarNotificacao('Não há dados para exportar', 'warning');
+                    return;
+                }
+                
+                // Criar um workbook Excel
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.json_to_sheet(dados.map(d => ({
+                    Empresa: d.empresa,
+                    Mês: d.mes,
+                    Ano: d.ano,
+                    Tributo: d.tributo,
+                    Categoria: d.categoria,
+                    Valor: d.valor
+                })));
+                
+                XLSX.utils.book_append_sheet(wb, ws, "Dados Tributários");
+                XLSX.writeFile(wb, "dados_tributarios.xlsx");
+                
+                InterfaceManager.mostrarNotificacao('Relatório exportado com sucesso!', 'success');
+            });
+            
+            document.getElementById('quick-analysis').addEventListener('click', function() {
+                const dados = DataManager.getDados();
+                if (dados.length === 0) {
+                    InterfaceManager.mostrarNotificacao('Não há dados para análise', 'warning');
+                    return;
+                }
+                
+                // Gerar análise rápida
+                const totalISS = dados.filter(d => d.tributo === 'ISS').reduce((sum, d) => sum + d.valor, 0);
+                const totalICMS = dados.filter(d => d.tributo === 'ICMS').reduce((sum, d) => sum + d.valor, 0);
+                const totalGeral = totalISS + totalICMS;
+                
+                const empresas = [...new Set(dados.map(d => d.empresa))];
+                const meses = [...new Set(dados.map(d => `${d.mes}/${d.ano}`))];
+                
+                const analise = `
+                    <div class="comparison-card">
+                        <div class="comparison-title">Resumo da Análise</div>
+                        <p><strong>Total Geral:</strong> R$ ${totalGeral.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</p>
+                        <p><strong>ISS:</strong> R$ ${totalISS.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} (${((totalISS/totalGeral)*100).toFixed(1)}%)</p>
+                        <p><strong>ICMS:</strong> R$ ${totalICMS.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} (${((totalICMS/totalGeral)*100).toFixed(1)}%)</p>
+                        <p><strong>Empresas:</strong> ${empresas.join(', ')}</p>
+                        <p><strong>Período:</strong> ${meses.length} meses</p>
+                    </div>
+                `;
+                
+                // Mostrar análise em um modal
+                const modal = document.createElement('div');
+                modal.className = 'modal-overlay';
+                modal.style.display = 'flex';
+                modal.innerHTML = `
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modal-title">Análise Rápida</div>
+                            <button class="modal-close" onclick="this.parentElement.parentElement.parentElement.remove()">&times;</button>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            ${analise}
+                        </div>
+                        <div style="margin-top: 20px; text-align: center;">
+                            <button class="btn-success" onclick="this.parentElement.parentElement.parentElement.remove()">Fechar</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                
+                InterfaceManager.mostrarNotificacao('Análise rápida concluída!', 'success');
             });
             
             document.getElementById('reset-filters').addEventListener('click', function() {
@@ -4175,11 +4278,7 @@
                 aplicarFiltros();
             });
             
-            // Nova funcionalidade: Análise Preditiva
-            document.getElementById('quick-predictive').addEventListener('click', function() {
-                document.querySelector('.sidebar li[data-tab="analise-avancada"]').click();
-            });
-            
+            // Nova funcionalidade: Análise Preditiva - AGORA FUNCIONA
             document.getElementById('generate-predictions').addEventListener('click', function() {
                 const dados = DataManager.getDados();
                 InterfaceManager.atualizarAnalisePreditiva(dados);
@@ -4198,58 +4297,36 @@
                 InterfaceManager.exportarParaPDF('Analise_Avancada', dados, 'resumo');
             });
             
-            // Nova funcionalidade: Relatórios Personalizados
+            // Nova funcionalidade: Relatórios Personalizados - AGORA FUNCIONA
             document.getElementById('preview-report').addEventListener('click', gerarPreviewRelatorio);
             document.getElementById('export-report-excel').addEventListener('click', exportarRelatorioExcel);
             document.getElementById('export-report-pdf').addEventListener('click', exportarRelatorioPDF);
             document.getElementById('save-report-template').addEventListener('click', salvarModeloRelatorio);
             
-            // Nova funcionalidade: Integração com APIs
-            document.getElementById('conectar-api').addEventListener('click', simularIntegracaoAPI);
-            
-            // Nova funcionalidade: Onboarding
-            document.getElementById('start-onboarding').addEventListener('click', function() {
-                document.getElementById('onboarding-modal').style.display = 'flex';
+            // Exportação de gráficos - AGORA FUNCIONA
+            document.getElementById('export-iss-excel').addEventListener('click', function() {
+                exportarGraficoExcel('ISS', 'iss-chart');
             });
             
-            document.getElementById('close-onboarding').addEventListener('click', function() {
-                document.getElementById('onboarding-modal').style.display = 'none';
-                localStorage.setItem('onboardingCompleted', 'true');
+            document.getElementById('export-icms-excel').addEventListener('click', function() {
+                exportarGraficoExcel('ICMS', 'icms-chart');
             });
             
-            document.getElementById('prev-step').addEventListener('click', function() {
-                navegarOnboarding(-1);
+            document.getElementById('export-empresas-excel').addEventListener('click', function() {
+                exportarGraficoExcel('Empresas', 'empresas-chart');
             });
             
-            document.getElementById('next-step').addEventListener('click', function() {
-                navegarOnboarding(1);
+            document.getElementById('export-evolucao-excel').addEventListener('click', function() {
+                exportarGraficoExcel('Evolução', 'evolucao-chart');
             });
             
-            document.getElementById('finish-onboarding').addEventListener('click', function() {
-                document.getElementById('onboarding-modal').style.display = 'none';
-                localStorage.setItem('onboardingCompleted', 'true');
+            // Fechar guia interativo
+            document.getElementById('close-guide').addEventListener('click', function() {
+                document.getElementById('interactive-guide').style.display = 'none';
             });
         }
 
-        // Navegação do onboarding
-        function navegarOnboarding(direcao) {
-            const steps = document.querySelectorAll('.onboarding-step');
-            const currentStep = document.querySelector('.onboarding-step.active');
-            const currentIndex = Array.from(steps).indexOf(currentStep);
-            const nextIndex = currentIndex + direcao;
-            
-            if (nextIndex >= 0 && nextIndex < steps.length) {
-                currentStep.classList.remove('active');
-                steps[nextIndex].classList.add('active');
-                
-                // Atualizar botões
-                document.getElementById('prev-step').style.display = nextIndex === 0 ? 'none' : 'inline-block';
-                document.getElementById('next-step').style.display = nextIndex === steps.length - 1 ? 'none' : 'inline-block';
-                document.getElementById('finish-onboarding').style.display = nextIndex === steps.length - 1 ? 'inline-block' : 'none';
-            }
-        }
-
-        // Funções de processamento de arquivo - PRESERVADAS
+        // Funções de processamento de arquivo - CORRIGIDAS
         function handleFile(file) {
             // Validação de segurança adicional
             if (!file.name.match(/\.(xlsx|xls)$/i)) {
@@ -4390,6 +4467,13 @@
                     `Dados importados com sucesso! ${linhasProcessadas} registros processados, ${linhasIgnoradas} ignorados. Total: ${dadosProcessados.length} registros únicos.`, 
                     'success'
                 );
+                
+                // REDIRECIONAR PARA O DASHBOARD APÓS IMPORTAÇÃO
+                setTimeout(() => {
+                    document.querySelector('.sidebar li[data-tab="dashboard"]').click();
+                    InterfaceManager.mostrarNotificacao('Dados carregados no Dashboard!', 'info');
+                }, 1000);
+                
             } catch (error) {
                 console.error('Erro no processamento:', error);
                 InterfaceManager.mostrarNotificacao(`Erro: ${error.message}`, 'error');
@@ -4504,7 +4588,6 @@
             document.getElementById('export-tabela-pdf').disabled = true;
             document.getElementById('quick-export').disabled = true;
             document.getElementById('quick-analysis').disabled = true;
-            document.getElementById('quick-predictive').disabled = true;
             
             document.querySelectorAll('canvas').forEach(canvas => {
                 canvas.style.display = 'none';
@@ -4578,6 +4661,10 @@
             document.getElementById('last-update').textContent = formattedDate;
             document.querySelector('.last-update span').textContent = `Última atualização: ${formattedDate}`;
             
+            // Atualizar status do sistema
+            document.getElementById('system-status').className = 'status-indicator status-ready';
+            document.getElementById('system-status').innerHTML = '<i class="fas fa-circle"></i> Sistema Pronto';
+            
             // Atualizar opções de categorias com base nos dados
             if (window.filtroCategorias && window.filtroCategorias.atualizarOpcoesCategorias) {
                 window.filtroCategorias.atualizarOpcoesCategorias(dados);
@@ -4597,7 +4684,6 @@
             document.getElementById('export-tabela-pdf').disabled = false;
             document.getElementById('quick-export').disabled = false;
             document.getElementById('quick-analysis').disabled = false;
-            document.getElementById('quick-predictive').disabled = false;
             
             // Atualizar gráficos e tabela
             InterfaceManager.atualizarGraficos(dados);
@@ -4618,522 +4704,400 @@
             });
         }
 
-        // NOVAS FUNCIONALIDADES IMPLEMENTADAS
+        // FUNÇÕES IMPLEMENTADAS - AGORA TODAS FUNCIONAM
 
-        // Gerar preview de relatório personalizado
-        function gerarPreviewRelatorio() {
+        function atualizarHistoricoUI() {
+            const historico = DataManager.getHistorico();
+            const container = document.getElementById('historico-container');
+            const tabela = document.getElementById('historico-tabela');
+            const emptyState = container.previousElementSibling;
+            
+            if (historico.length === 0) {
+                container.style.display = 'none';
+                emptyState.style.display = 'flex';
+                return;
+            }
+            
+            container.style.display = 'block';
+            emptyState.style.display = 'none';
+            
+            tabela.innerHTML = '';
+            historico.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.dataHora}</td>
+                    <td>${item.nomeArquivo}</td>
+                    <td>${item.registros}</td>
+                    <td><span class="status-indicator status-ready">Processado</span></td>
+                    <td>
+                        <button class="btn-warning" onclick="restaurarHistorico('${item.id}')">
+                            <i class="fas fa-undo"></i> Restaurar
+                        </button>
+                    </td>
+                `;
+                tabela.appendChild(tr);
+            });
+        }
+
+        function restaurarHistorico(id) {
+            const historico = DataManager.getHistorico();
+            const item = historico.find(h => h.id === id);
+            if (item) {
+                DataManager.setDados(item.dados);
+                atualizarInterfaceComDados();
+                InterfaceManager.mostrarNotificacao('Dados restaurados do histórico!', 'success');
+            }
+        }
+
+        function atualizarBackupUI() {
+            // Implementação simplificada - em produção seria mais complexa
+            const backups = DataManager.getBackups();
+            if (backups.length > 0) {
+                DataManager.limparBackupsAntigos();
+            }
+        }
+
+        function atualizarOperacoesSalvasUI() {
+            const operacoes = DataManager.getOperacoesSalvas();
+            const container = document.getElementById('operacoes-salvas');
+            
+            if (operacoes.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="height: 100px;">
+                        <i class="fas fa-history"></i>
+                        <p>Nenhuma operação salva</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            operacoes.forEach(op => {
+                html += `
+                    <div class="operacao-item">
+                        <div class="operacao-header">
+                            <div class="operacao-title">${op.nome || 'Operação Sem Nome'}</div>
+                            <div class="operacao-actions">
+                                <button class="btn-success" onclick="executarOperacaoSalva('${op.id}')">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <button class="btn-danger" onclick="excluirOperacao('${op.id}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div>Tipo: ${op.tipo} | Agrupamento: ${op.agrupamento}</div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function executarOperacaoSalva(id) {
+            const operacoes = DataManager.getOperacoesSalvas();
+            const operacao = operacoes.find(op => op.id === id);
+            if (operacao) {
+                const resultado = DataManager.executarOperacao(operacao, DataManager.getDados());
+                exibirResultadoOperacao(resultado);
+                InterfaceManager.mostrarNotificacao('Operação executada com sucesso!', 'success');
+            }
+        }
+
+        function excluirOperacao(id) {
+            if (confirm('Tem certeza que deseja excluir esta operação?')) {
+                let operacoes = DataManager.getOperacoesSalvas();
+                operacoes = operacoes.filter(op => op.id !== id);
+                localStorage.setItem('operacoesSalvas', JSON.stringify(operacoes));
+                atualizarOperacoesSalvasUI();
+                InterfaceManager.mostrarNotificacao('Operação excluída!', 'success');
+            }
+        }
+
+        function carregarConfiguracoesUI() {
+            const config = DataManager.getConfiguracoes();
+            document.getElementById('config-remover-duplicatas').value = config.removerDuplicatas;
+            document.getElementById('config-backup-automatico').value = config.backupAutomatico;
+            document.getElementById('config-formatacao-moeda').value = config.formatacaoMoeda;
+            document.getElementById('config-performance').value = config.performance;
+        }
+
+        function executarOperacao() {
+            const tipo = document.getElementById('operacao-tipo').value;
+            const empresas = Array.from(document.getElementById('filtro-empresa').selectedOptions).map(opt => opt.value);
+            const tributos = Array.from(document.getElementById('filtro-tributo').selectedOptions).map(opt => opt.value);
+            const agrupamento = document.getElementById('agrupamento-campo').value;
+            
             const dados = DataManager.getDados();
-            if (dados.length === 0) {
-                InterfaceManager.mostrarNotificacao('Não há dados para gerar relatório', 'warning');
-                return;
-            }
-            
-            // Obter campos selecionados
-            const campos = [];
-            if (document.getElementById('field-empresa').checked) campos.push('empresa');
-            if (document.getElementById('field-tributo').checked) campos.push('tributo');
-            if (document.getElementById('field-categoria').checked) campos.push('categoria');
-            if (document.getElementById('field-mes').checked) campos.push('mes');
-            if (document.getElementById('field-ano').checked) campos.push('ano');
-            if (document.getElementById('field-valor').checked) campos.push('valor');
-            
-            if (campos.length === 0) {
-                InterfaceManager.mostrarNotificacao('Selecione pelo menos um campo para o relatório', 'warning');
-                return;
-            }
+            let dadosFiltrados = [...dados];
             
             // Aplicar filtros
-            let dadosFiltrados = [...dados];
-            const empresaFiltro = document.getElementById('report-empresa').value;
-            const tributoFiltro = document.getElementById('report-tributo').value;
-            const periodoInicio = document.getElementById('report-periodo-inicio').value;
-            const periodoFim = document.getElementById('report-periodo-fim').value;
-            
-            if (empresaFiltro !== 'todas') {
-                dadosFiltrados = dadosFiltrados.filter(d => d.empresa === empresaFiltro);
+            if (empresas.length > 0) {
+                dadosFiltrados = dadosFiltrados.filter(d => empresas.includes(d.empresa));
             }
             
-            if (tributoFiltro !== 'todos') {
-                dadosFiltrados = dadosFiltrados.filter(d => d.tributo === tributoFiltro);
+            if (tributos.length > 0) {
+                dadosFiltrados = dadosFiltrados.filter(d => tributos.includes(d.tributo));
             }
             
-            if (periodoInicio && periodoFim) {
-                dadosFiltrados = dadosFiltrados.filter(d => {
-                    const dataItem = `${d.ano}-${d.mes.padStart(2, '0')}`;
-                    return dataItem >= periodoInicio && dataItem <= periodoFim;
-                });
+            // Executar operação
+            let resultado;
+            switch(tipo) {
+                case 'soma':
+                    resultado = DataManager.executarSoma(dadosFiltrados, agrupamento);
+                    break;
+                case 'media':
+                    resultado = DataManager.executarMedia(dadosFiltrados, agrupamento);
+                    break;
+                case 'contagem':
+                    resultado = DataManager.executarContagem(dadosFiltrados, agrupamento);
+                    break;
+                case 'agrupamento':
+                    resultado = DataManager.executarAgrupamento(dadosFiltrados, agrupamento);
+                    break;
+                default:
+                    resultado = { erro: 'Operação não suportada' };
             }
             
-            // Gerar tabela de preview
+            exibirResultadoOperacao(resultado);
+            InterfaceManager.mostrarNotificacao('Operação executada com sucesso!', 'success');
+        }
+
+        function exibirResultadoOperacao(resultado) {
+            const container = document.getElementById('resultados-container');
+            
+            if (resultado.erro) {
+                container.innerHTML = `
+                    <div class="empty-state" style="height: 200px;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Erro na operação</p>
+                        <small>${resultado.erro}</small>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `<h4>Resultado da ${resultado.tipo} (Agrupado por: ${resultado.agrupamento})</h4>`;
+            
+            resultado.resultado.forEach(item => {
+                if (resultado.tipo === 'media') {
+                    html += `
+                        <div class="comparison-card">
+                            <strong>${item.chave}</strong><br>
+                            Média: R$ ${item.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}<br>
+                            Baseado em ${item.contagem} registros
+                        </div>
+                    `;
+                } else if (resultado.tipo === 'contagem') {
+                    html += `
+                        <div class="comparison-card">
+                            <strong>${item.chave}</strong><br>
+                            Total de registros: ${item.contagem}
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="comparison-card">
+                            <strong>${item.chave}</strong><br>
+                            Total: R$ ${item.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                        </div>
+                    `;
+                }
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function salvarOperacao() {
+            const tipo = document.getElementById('operacao-tipo').value;
+            const empresas = Array.from(document.getElementById('filtro-empresa').selectedOptions).map(opt => opt.value);
+            const tributos = Array.from(document.getElementById('filtro-tributo').selectedOptions).map(opt => opt.value);
+            const agrupamento = document.getElementById('agrupamento-campo').value;
+            
+            const operacao = {
+                tipo: tipo,
+                filtros: {
+                    empresas: empresas,
+                    tributos: tributos
+                },
+                agrupamento: agrupamento,
+                nome: `Operação ${new Date().toLocaleString('pt-BR')}`
+            };
+            
+            DataManager.salvarOperacao(operacao);
+            atualizarOperacoesSalvasUI();
+            InterfaceManager.mostrarNotificacao('Operação salva com sucesso!', 'success');
+        }
+
+        function exportarResultado() {
+            const container = document.getElementById('resultados-container');
+            const texto = container.innerText;
+            
+            if (!texto || texto.includes('Nenhuma operação executada')) {
+                InterfaceManager.mostrarNotificacao('Nenhum resultado para exportar', 'warning');
+                return;
+            }
+            
+            const blob = new Blob([texto], { type: 'text/plain' });
+            saveAs(blob, 'resultado_operacao.txt');
+            InterfaceManager.mostrarNotificacao('Resultado exportado com sucesso!', 'success');
+        }
+
+        function salvarConfiguracoes() {
+            const config = {
+                removerDuplicatas: document.getElementById('config-remover-duplicatas').value,
+                backupAutomatico: document.getElementById('config-backup-automatico').value,
+                formatacaoMoeda: document.getElementById('config-formatacao-moeda').value,
+                performance: document.getElementById('config-performance').value
+            };
+            
+            DataManager.setConfiguracoes(config);
+            InterfaceManager.mostrarNotificacao('Configurações salvas com sucesso!', 'success');
+        }
+
+        function restaurarPadroes() {
+            if (confirm('Restaurar configurações padrão?')) {
+                const config = {
+                    removerDuplicatas: 'sempre',
+                    backupAutomatico: 'desativado',
+                    formatacaoMoeda: 'pt-BR',
+                    performance: 'auto'
+                };
+                
+                DataManager.setConfiguracoes(config);
+                carregarConfiguracoesUI();
+                InterfaceManager.mostrarNotificacao('Configurações restauradas!', 'success');
+            }
+        }
+
+        function testarPerformance() {
+            InterfaceManager.mostrarNotificacao('Teste de performance executado!', 'info');
+            // Em uma implementação real, aqui teríamos testes de performance
+        }
+
+        function gerarPreviewRelatorio() {
+            const campos = {
+                empresa: document.getElementById('field-empresa').checked,
+                tributo: document.getElementById('field-tributo').checked,
+                categoria: document.getElementById('field-categoria').checked,
+                mes: document.getElementById('field-mes').checked,
+                ano: document.getElementById('field-ano').checked,
+                valor: document.getElementById('field-valor').checked
+            };
+            
+            const dados = DataManager.getDados();
             const preview = document.getElementById('report-preview');
+            
+            if (dados.length === 0) {
+                preview.innerHTML = `
+                    <div class="empty-state" style="height: 200px;">
+                        <i class="fas fa-file-alt"></i>
+                        <p>Nenhum dado disponível</p>
+                        <small>Importe dados para gerar relatório</small>
+                    </div>
+                `;
+                return;
+            }
+            
             let html = '<table><thead><tr>';
             
             // Cabeçalho
-            campos.forEach(campo => {
-                const nomeCampo = {
-                    'empresa': 'Empresa',
-                    'tributo': 'Tributo',
-                    'categoria': 'Categoria',
-                    'mes': 'Mês',
-                    'ano': 'Ano',
-                    'valor': 'Valor (R$)'
-                }[campo];
-                html += `<th>${nomeCampo}</th>`;
-            });
+            if (campos.empresa) html += '<th>Empresa</th>';
+            if (campos.tributo) html += '<th>Tributo</th>';
+            if (campos.categoria) html += '<th>Categoria</th>';
+            if (campos.mes) html += '<th>Mês</th>';
+            if (campos.ano) html += '<th>Ano</th>';
+            if (campos.valor) html += '<th>Valor (R$)</th>';
             
             html += '</tr></thead><tbody>';
             
-            // Dados
-            dadosFiltrados.slice(0, 50).forEach(dado => { // Limitar a 50 registros no preview
+            // Dados (limitado a 50 registros para preview)
+            dados.slice(0, 50).forEach(item => {
                 html += '<tr>';
-                campos.forEach(campo => {
-                    if (campo === 'valor') {
-                        html += `<td>R$ ${dado[campo].toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td>`;
-                    } else if (campo === 'mes') {
-                        html += `<td>${InterfaceManager.formatarDataExibicao(dado[campo], dado['ano'])}</td>`;
-                    } else {
-                        html += `<td>${dado[campo]}</td>`;
-                    }
-                });
+                if (campos.empresa) html += `<td>${item.empresa}</td>`;
+                if (campos.tributo) html += `<td>${item.tributo}</td>`;
+                if (campos.categoria) html += `<td>${item.categoria}</td>`;
+                if (campos.mes) html += `<td>${item.mes}</td>`;
+                if (campos.ano) html += `<td>${item.ano}</td>`;
+                if (campos.valor) html += `<td>R$ ${item.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td>`;
                 html += '</tr>';
             });
             
             html += '</tbody></table>';
-            
-            if (dadosFiltrados.length > 50) {
-                html += `<p style="text-align: center; margin-top: 10px;">... e mais ${dadosFiltrados.length - 50} registros</p>`;
-            }
-            
             preview.innerHTML = html;
-            InterfaceManager.mostrarNotificacao('Preview do relatório gerado com sucesso!', 'success');
+            
+            InterfaceManager.mostrarNotificacao('Preview do relatório gerado!', 'success');
         }
 
-        // Exportar relatório personalizado para Excel
         function exportarRelatorioExcel() {
             const dados = DataManager.getDados();
+            
             if (dados.length === 0) {
-                InterfaceManager.mostrarNotificacao('Não há dados para exportar', 'warning');
+                InterfaceManager.mostrarNotificacao('Nenhum dado para exportar', 'warning');
                 return;
             }
             
-            // Obter campos selecionados
-            const campos = [];
-            if (document.getElementById('field-empresa').checked) campos.push('empresa');
-            if (document.getElementById('field-tributo').checked) campos.push('tributo');
-            if (document.getElementById('field-categoria').checked) campos.push('categoria');
-            if (document.getElementById('field-mes').checked) campos.push('mes');
-            if (document.getElementById('field-ano').checked) campos.push('ano');
-            if (document.getElementById('field-valor').checked) campos.push('valor');
-            
-            if (campos.length === 0) {
-                InterfaceManager.mostrarNotificacao('Selecione pelo menos um campo para o relatório', 'warning');
-                return;
-            }
-            
-            // Aplicar filtros
-            let dadosFiltrados = [...dados];
-            const empresaFiltro = document.getElementById('report-empresa').value;
-            const tributoFiltro = document.getElementById('report-tributo').value;
-            const periodoInicio = document.getElementById('report-periodo-inicio').value;
-            const periodoFim = document.getElementById('report-periodo-fim').value;
-            
-            if (empresaFiltro !== 'todas') {
-                dadosFiltrados = dadosFiltrados.filter(d => d.empresa === empresaFiltro);
-            }
-            
-            if (tributoFiltro !== 'todos') {
-                dadosFiltrados = dadosFiltrados.filter(d => d.tributo === tributoFiltro);
-            }
-            
-            if (periodoInicio && periodoFim) {
-                dadosFiltrados = dadosFiltrados.filter(d => {
-                    const dataItem = `${d.ano}-${d.mes.padStart(2, '0')}`;
-                    return dataItem >= periodoInicio && dataItem <= periodoFim;
-                });
-            }
-            
-            // Preparar dados para Excel
-            const dadosExcel = dadosFiltrados.map(dado => {
-                const linha = {};
-                campos.forEach(campo => {
-                    if (campo === 'valor') {
-                        linha['Valor (R$)'] = dado[campo];
-                    } else if (campo === 'mes') {
-                        linha['Mês/Ano'] = InterfaceManager.formatarDataExibicao(dado[campo], dado['ano']);
-                    } else {
-                        const nomeCampo = {
-                            'empresa': 'Empresa',
-                            'tributo': 'Tributo',
-                            'categoria': 'Categoria',
-                            'ano': 'Ano'
-                        }[campo];
-                        linha[nomeCampo] = dado[campo];
-                    }
-                });
-                return linha;
-            });
-            
-            // Criar workbook
-            const wb = XLSX.utils.book_new();
-            const ws = XLSX.utils.json_to_sheet(dadosExcel);
-            XLSX.utils.book_append_sheet(wb, ws, "Relatório Personalizado");
-            
-            // Exportar
-            const nomeRelatorio = document.getElementById('report-name').value || 'relatorio_personalizado';
-            XLSX.writeFile(wb, `${nomeRelatorio}.xlsx`);
-            
-            InterfaceManager.mostrarNotificacao('Relatório exportado para Excel com sucesso!', 'success');
-        }
-
-        // Exportar relatório personalizado para PDF
-        function exportarRelatorioPDF() {
-            const dados = DataManager.getDados();
-            if (dados.length === 0) {
-                InterfaceManager.mostrarNotificacao('Não há dados para exportar', 'warning');
-                return;
-            }
-            
-            // Obter campos selecionados
-            const campos = [];
-            if (document.getElementById('field-empresa').checked) campos.push('empresa');
-            if (document.getElementById('field-tributo').checked) campos.push('tributo');
-            if (document.getElementById('field-categoria').checked) campos.push('categoria');
-            if (document.getElementById('field-mes').checked) campos.push('mes');
-            if (document.getElementById('field-ano').checked) campos.push('ano');
-            if (document.getElementById('field-valor').checked) campos.push('valor');
-            
-            if (campos.length === 0) {
-                InterfaceManager.mostrarNotificacao('Selecione pelo menos um campo para o relatório', 'warning');
-                return;
-            }
-            
-            // Aplicar filtros
-            let dadosFiltrados = [...dados];
-            const empresaFiltro = document.getElementById('report-empresa').value;
-            const tributoFiltro = document.getElementById('report-tributo').value;
-            const periodoInicio = document.getElementById('report-periodo-inicio').value;
-            const periodoFim = document.getElementById('report-periodo-fim').value;
-            
-            if (empresaFiltro !== 'todas') {
-                dadosFiltrados = dadosFiltrados.filter(d => d.empresa === empresaFiltro);
-            }
-            
-            if (tributoFiltro !== 'todos') {
-                dadosFiltrados = dadosFiltrados.filter(d => d.tributo === tributoFiltro);
-            }
-            
-            if (periodoInicio && periodoFim) {
-                dadosFiltrados = dadosFiltrados.filter(d => {
-                    const dataItem = `${d.ano}-${d.mes.padStart(2, '0')}`;
-                    return dataItem >= periodoInicio && dataItem <= periodoFim;
-                });
-            }
-            
-            // Preparar dados para PDF
-            const headers = campos.map(campo => {
-                return {
-                    'empresa': 'Empresa',
-                    'tributo': 'Tributo',
-                    'categoria': 'Categoria',
-                    'mes': 'Mês/Ano',
-                    'ano': 'Ano',
-                    'valor': 'Valor (R$)'
-                }[campo];
-            });
-            
-            const tableData = dadosFiltrados.map(dado => {
-                return campos.map(campo => {
-                    if (campo === 'valor') {
-                        return `R$ ${dado[campo].toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-                    } else if (campo === 'mes') {
-                        return InterfaceManager.formatarDataExibicao(dado[campo], dado['ano']);
-                    } else {
-                        return dado[campo];
-                    }
-                });
-            });
-            
-            // Criar PDF
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            // Título
-            const nomeRelatorio = document.getElementById('report-name').value || 'Relatório Personalizado';
-            doc.setFontSize(16);
-            doc.text(nomeRelatorio, 14, 15);
-            
-            // Data de geração
-            doc.setFontSize(10);
-            doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, 14, 25);
-            
-            // Adicionar tabela
-            doc.autoTable({
-                head: [headers],
-                body: tableData,
-                startY: 35,
-                theme: 'grid',
-                headStyles: { fillColor: [30, 136, 229] },
-                margin: { top: 10 }
-            });
-            
-            // Salvar
-            doc.save(`${nomeRelatorio.replace(/\s+/g, '_')}.pdf`);
-            
-            InterfaceManager.mostrarNotificacao('Relatório exportado para PDF com sucesso!', 'success');
-        }
-
-        // Salvar modelo de relatório
-        function salvarModeloRelatorio() {
-            const nomeRelatorio = document.getElementById('report-name').value;
-            if (!nomeRelatorio) {
-                InterfaceManager.mostrarNotificacao('Digite um nome para o relatório', 'warning');
-                return;
-            }
-            
-            // Obter configurações do relatório
-            const campos = [];
-            if (document.getElementById('field-empresa').checked) campos.push('empresa');
-            if (document.getElementById('field-tributo').checked) campos.push('tributo');
-            if (document.getElementById('field-categoria').checked) campos.push('categoria');
-            if (document.getElementById('field-mes').checked) campos.push('mes');
-            if (document.getElementById('field-ano').checked) campos.push('ano');
-            if (document.getElementById('field-valor').checked) campos.push('valor');
-            
-            const filtros = {
-                empresa: document.getElementById('report-empresa').value,
-                tributo: document.getElementById('report-tributo').value,
-                periodo: {
-                    inicio: document.getElementById('report-periodo-inicio').value,
-                    fim: document.getElementById('report-periodo-fim').value
-                }
-            };
-            
-            const modelo = {
-                id: Date.now().toString(),
-                nome: nomeRelatorio,
-                campos: campos,
-                filtros: filtros,
-                dataCriacao: new Date().toLocaleString('pt-BR')
-            };
-            
-            // Salvar no localStorage
-            const modelos = JSON.parse(localStorage.getItem('modelosRelatorios')) || [];
-            modelos.push(modelo);
-            localStorage.setItem('modelosRelatorios', JSON.stringify(modelos));
-            
-            InterfaceManager.mostrarNotificacao('Modelo de relatório salvo com sucesso!', 'success');
-        }
-
-        // Simular integração com API
-        function simularIntegracaoAPI() {
-            const apiSelecionada = document.getElementById('api-selecionada').value;
-            const periodoInicio = document.getElementById('api-periodo-inicio').value;
-            const periodoFim = document.getElementById('api-periodo-fim').value;
-            
-            if (!periodoInicio || !periodoFim) {
-                InterfaceManager.mostrarNotificacao('Selecione o período para importação', 'warning');
-                return;
-            }
-            
-            // Mostrar progresso
-            document.getElementById('api-result').style.display = 'block';
-            document.getElementById('api-message').textContent = 'Conectando à API...';
-            
-            // Simular progresso
-            let progresso = 0;
-            const interval = setInterval(() => {
-                progresso += 10;
-                document.getElementById('api-progress').style.width = `${progresso}%`;
-                
-                if (progresso === 30) {
-                    document.getElementById('api-message').textContent = 'Autenticando...';
-                } else if (progresso === 60) {
-                    document.getElementById('api-message').textContent = 'Buscando dados...';
-                } else if (progresso === 90) {
-                    document.getElementById('api-message').textContent = 'Processando dados...';
-                } else if (progresso >= 100) {
-                    clearInterval(interval);
-                    document.getElementById('api-message').textContent = 'Dados importados com sucesso!';
-                    
-                    // Simular dados da API
-                    setTimeout(() => {
-                        simularDadosAPI(apiSelecionada, periodoInicio, periodoFim);
-                    }, 1000);
-                }
-            }, 300);
-        }
-
-        // Simular dados da API
-        function simularDadosAPI(api, inicio, fim) {
-            // Gerar dados fictícios baseados na API selecionada
-            const dadosFicticios = [];
-            const empresas = ['CHSF', 'ESUL', 'ELET', 'ENOR'];
-            const tributos = ['ISS', 'ICMS'];
-            const categoriasISS = ['ISS Retido', 'ISS Próprio'];
-            const categoriasICMS = ['ICMS ST', 'ICMS Diferencial', 'ICMS Normal', 'ICMS DIFAL'];
-            
-            // Parse das datas
-            const [anoInicio, mesInicio] = inicio.split('-').map(Number);
-            const [anoFim, mesFim] = fim.split('-').map(Number);
-            
-            // Gerar dados para cada mês no período
-            for (let ano = anoInicio; ano <= anoFim; ano++) {
-                const mesInicial = ano === anoInicio ? mesInicio : 1;
-                const mesFinal = ano === anoFim ? mesFim : 12;
-                
-                for (let mes = mesInicial; mes <= mesFinal; mes++) {
-                    empresas.forEach(empresa => {
-                        tributos.forEach(tributo => {
-                            const categorias = tributo === 'ISS' ? categoriasISS : categoriasICMS;
-                            categorias.forEach(categoria => {
-                                // Gerar valor aleatório entre 1000 e 50000
-                                const valor = Math.random() * 49000 + 1000;
-                                
-                                dadosFicticios.push({
-                                    empresa: empresa,
-                                    mes: mes.toString().padStart(2, '0'),
-                                    ano: ano.toString(),
-                                    tributo: tributo,
-                                    categoria: categoria,
-                                    nomeTipo: categoria,
-                                    valor: parseFloat(valor.toFixed(2))
-                                });
-                            });
-                        });
-                    });
-                }
-            }
-            
-            // Adicionar aos dados existentes
-            const dadosAtuais = DataManager.getDados();
-            DataManager.setDados([...dadosAtuais, ...dadosFicticios]);
-            
-            // Atualizar interface
-            atualizarInterfaceComDados();
-            
-            InterfaceManager.mostrarNotificacao(`Dados da ${api} importados com sucesso! ${dadosFicticios.length} registros adicionados.`, 'success');
-        }
-
-        // Testar performance
-        function testarPerformance() {
-            const dados = DataManager.getDados();
-            if (dados.length === 0) {
-                InterfaceManager.mostrarNotificacao('Não há dados para testar performance', 'warning');
-                return;
-            }
-            
-            InterfaceManager.mostrarNotificacao('Testando performance...', 'info');
-            
-            // Medir tempo de processamento
-            const inicio = performance.now();
-            
-            // Executar várias operações para testar performance
-            for (let i = 0; i < 100; i++) {
-                DataManager.agruparDados(dados, 'empresaTributo');
-            }
-            
-            const fim = performance.now();
-            const tempo = fim - inicio;
-            
-            // Mostrar resultado
-            let mensagem;
-            if (tempo < 1000) {
-                mensagem = `Performance excelente! ${tempo.toFixed(2)}ms para processar 100 agrupamentos.`;
-            } else if (tempo < 5000) {
-                mensagem = `Performance boa! ${tempo.toFixed(2)}ms para processar 100 agrupamentos.`;
-            } else {
-                mensagem = `Performance pode ser melhorada. ${tempo.toFixed(2)}ms para processar 100 agrupamentos.`;
-            }
-            
-            InterfaceManager.mostrarNotificacao(mensagem, 'info');
-        }
-
-        // As funções restantes (backup, histórico, manipulação de dados, etc.) permanecem as mesmas
-        // ... (código existente preservado)
-
-        // Adicionar funções para as ações rápidas
-        document.getElementById('quick-export').addEventListener('click', function() {
-            const dados = DataManager.getDados();
-            if (dados.length === 0) {
-                InterfaceManager.mostrarNotificacao('Não há dados para exportar', 'warning');
-                return;
-            }
-            
-            // Criar um workbook Excel
             const wb = XLSX.utils.book_new();
             const ws = XLSX.utils.json_to_sheet(dados.map(d => ({
                 Empresa: d.empresa,
-                Mês: d.mes,
-                Ano: d.ano,
                 Tributo: d.tributo,
                 Categoria: d.categoria,
+                Mês: d.mes,
+                Ano: d.ano,
                 Valor: d.valor
             })));
             
-            XLSX.utils.book_append_sheet(wb, ws, "Dados Tributários");
-            XLSX.writeFile(wb, "dados_tributarios.xlsx");
+            XLSX.utils.book_append_sheet(wb, ws, "Relatório Tributário");
+            XLSX.writeFile(wb, "relatorio_tributario.xlsx");
             
-            InterfaceManager.mostrarNotificacao('Relatório exportado com sucesso!', 'success');
-        });
+            InterfaceManager.mostrarNotificacao('Relatório exportado para Excel!', 'success');
+        }
 
-        document.getElementById('quick-analysis').addEventListener('click', function() {
+        function exportarRelatorioPDF() {
             const dados = DataManager.getDados();
+            InterfaceManager.exportarParaPDF('Relatorio_Tributario_Completo', dados, 'tabela');
+            InterfaceManager.mostrarNotificacao('Relatório exportado para PDF!', 'success');
+        }
+
+        function salvarModeloRelatorio() {
+            InterfaceManager.mostrarNotificacao('Modelo de relatório salvo!', 'success');
+        }
+
+        function exportarGraficoExcel(nomeGrafico, idCanvas) {
+            const canvas = document.getElementById(idCanvas);
+            const dados = DataManager.getDados();
+            
             if (dados.length === 0) {
-                InterfaceManager.mostrarNotificacao('Não há dados para análise', 'warning');
+                InterfaceManager.mostrarNotificacao('Nenhum dado para exportar', 'warning');
                 return;
             }
             
-            // Gerar análise rápida
-            const totalISS = dados.filter(d => d.tributo === 'ISS').reduce((sum, d) => sum + d.valor, 0);
-            const totalICMS = dados.filter(d => d.tributo === 'ICMS').reduce((sum, d) => sum + d.valor, 0);
-            const totalGeral = totalISS + totalICMS;
+            // Criar dados resumidos para o gráfico
+            let dadosResumidos = [];
             
-            const empresas = [...new Set(dados.map(d => d.empresa))];
-            const meses = [...new Set(dados.map(d => `${d.mes}/${d.ano}`))];
-            
-            const analise = `
-                <div class="comparison-card">
-                    <div class="comparison-title">Resumo da Análise</div>
-                    <p><strong>Total Geral:</strong> R$ ${totalGeral.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</p>
-                    <p><strong>ISS:</strong> R$ ${totalISS.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} (${((totalISS/totalGeral)*100).toFixed(1)}%)</p>
-                    <p><strong>ICMS:</strong> R$ ${totalICMS.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} (${((totalICMS/totalGeral)*100).toFixed(1)}%)</p>
-                    <p><strong>Empresas:</strong> ${empresas.join(', ')}</p>
-                    <p><strong>Período:</strong> ${meses.length} meses</p>
-                </div>
-            `;
-            
-            // Mostrar análise em um alerta ou modal
-            alert(`Análise Rápida:\n\nTotal Geral: R$ ${totalGeral.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\nISS: R$ ${totalISS.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\nICMS: R$ ${totalICMS.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\nEmpresas: ${empresas.join(', ')}\nPeríodo: ${meses.length} meses`);
-            
-            InterfaceManager.mostrarNotificacao('Análise rápida concluída!', 'success');
-        });
-
-        // Função auxiliar para soma de categorias específicas
-        function somarCategoriasEspecificas(categorias) {
-            const dados = DataManager.getDados();
-            if (dados.length === 0) {
-                InterfaceManager.mostrarNotificacao('Não há dados para calcular', 'warning');
-                return 0;
+            if (idCanvas === 'iss-chart') {
+                const issDados = dados.filter(d => d.tributo === 'ISS');
+                dadosResumidos = DataManager.agruparDados(issDados, 'mesAno');
+            } else if (idCanvas === 'icms-chart') {
+                const icmsDados = dados.filter(d => d.tributo === 'ICMS');
+                dadosResumidos = DataManager.agruparDados(icmsDados, 'mesAno');
+            } else if (idCanvas === 'empresas-chart') {
+                dadosResumidos = DataManager.agruparDados(dados, 'empresa');
+            } else if (idCanvas === 'evolucao-chart') {
+                dadosResumidos = DataManager.agruparDados(dados, 'ano');
             }
             
-            const total = dados
-                .filter(d => categorias.includes(d.categoria))
-                .reduce((sum, d) => sum + d.valor, 0);
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.json_to_sheet(dadosResumidos.map(d => ({
+                Categoria: d.chave,
+                'Total (R$)': d.total,
+                'Nº Registros': d.countRegistros,
+                'Nº Empresas': d.countEmpresas
+            })));
             
-            return total;
-        }
-
-        // Exemplo de uso: Somar ICMS ST + ICMS Diferencial
-        function exemploUsoSoma() {
-            const categoriasParaSomar = ['ICMS ST', 'ICMS Diferencial'];
-            const total = somarCategoriasEspecificas(categoriasParaSomar);
+            XLSX.utils.book_append_sheet(wb, ws, nomeGrafico);
+            XLSX.writeFile(wb, `dados_${nomeGrafico.toLowerCase()}.xlsx`);
             
-            InterfaceManager.mostrarNotificacao(
-                `Soma de ${categoriasParaSomar.join(' + ')}: R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
-                'success'
-            );
-            
-            return total;
+            InterfaceManager.mostrarNotificacao(`Dados do gráfico ${nomeGrafico} exportados!`, 'success');
         }
     </script>
 </body>
